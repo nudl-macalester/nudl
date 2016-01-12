@@ -64,7 +64,7 @@ app.get('/signout', function(req, res) {
 
 app.get('/verify', verification.runVerification);
 
-app.post('/forgotpassword/:userEmail', function(req, res) {
+app.post('/forgot/:userEmail', function(req, res) {
     var userEmail = req.params('userEmail');
     db.User.find({email: userEmail}, function(err, user) {
         if (err) {

@@ -34,31 +34,21 @@ module.exports.setup = function(passport) {
                         return done(err, false, {message: 'name taken'});
                     } else {
                         var nUser = new database.User();
+                        nUser.name = username;
+                        nUser.password = password;
+                        nUser.email = email;
+                        nUser.verified = true;
 
-                        bcrypt.genSalt(10, function(err, salt) {
-                            bcrypt.hash(password, salt, null, function(err, hash) {
-                                if (err)
-                                    return done(err);
+                        nUser.save(function(err) {
+                            if (err)
+                                return done(err);
 
-                                nUser.name = username;
-                                nUser.email = email;
-                                nUser.password = hash;
-
-                                // TODO: CHANGE THIS TO FALSE TO REQUIRE EMAIL VERIFICATION!!!
-                                nUser.verified = false;
-
-                                nUser.save(function(err) {
-                                    if (err)
-                                        return done(err);
-
-                                    if(!nUser.verified) {
-                                        database.Verif.generateForUser(nUser, function (err, verif) {
-                                            sendEmailVerification(nUser, verif._id);
-                                        });
-                                    }
-                                    return done(null, nUser);
-                                })
-                            });
+                            if(!nUser.verified) {
+                                database.Verif.generateForUser(nUser, function (err, verif) {
+                                    sendEmailVerification(nUser, verif._id);
+                                });
+                            }
+                            return done(null, nUser);
                         });
                     }
                 });
@@ -73,23 +63,14 @@ module.exports.setup = function(passport) {
         },
         function(username, password, done) {
             database.User.findOne({ email: username }, function (err, user) {
-                if (err) {
-                    return done(err);
-                }
-                if (!user) {
-                    return done(null, false, {message: 'email not found'});
-                } else {
-                    bcrypt.compare(password, user.password, function(err, equal) {
-                        if (err) {
-                            return done(err);
-                        }
-                        if(!equal) {
-                            return done(null, false, {message: 'wrong password for this username'});
-                        }
+                if (err) return done(err);
+                if (!user) return done(null, false, {message: 'email not found'});
 
-                        return done(null, user);
-                    });
-                }
+                user.comparePassword(password, function(err, isMatch) {
+                    if (isMatch) return done(null, user);
+
+                    return done(null, false, { message: 'Incorrect password.' });
+                });
             });
         }
     ));
@@ -106,7 +87,6 @@ function sendEmailVerification(user, vid) {
 module.exports.runVerification = function(req, res) {
     var tok = req.param('tok');
 
-    console.log(tok);
     database.Verif.attemptVerification(tok, function(err, note, verif) {
         if(err) {
             res.status(500);
