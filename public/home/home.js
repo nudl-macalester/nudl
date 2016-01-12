@@ -32,6 +32,19 @@ $(function() {
                 contentType: "application/json; charset=utf-8"
             });
         }
+
+        self.unattend = function(data) {
+
+            $.ajax({
+                url: '/mealshare/unattend/' + data._id,
+                type: 'PUT',
+                success: function(ms) {
+                    self.attendingMealshares.splice(self.attendingMealshares.indexOf(ms), 1);
+                },
+                data: null,
+                contentType: "application/json; charset=utf-8"
+            });
+        }
     }
 
     ko.applyBindings(new AppViewModel());

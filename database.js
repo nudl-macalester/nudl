@@ -12,6 +12,7 @@ var mealshare = require('./models/mealshare');
 
 module.exports = {
     User: user.User,
+    Verif: user.Verif,
     Mealshare: mealshare.Mealshare,
     db: db
 };

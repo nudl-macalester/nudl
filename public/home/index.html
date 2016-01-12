@@ -53,6 +53,7 @@
 	<ul data-bind="foreach: attendingMealshares">
 		<li>
 			<label data-bind="text: name"></label>
+			<button data-bind="click: $parent.unattend">Unattend</button>
 		</li>
 	</ul>
 </div>

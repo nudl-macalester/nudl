@@ -28,7 +28,7 @@ verifSchema.statics.generateForUser = function(user, callback) {
     var verif = new Verif();
     
     var now = new Date();
-    now.setDate(now.getTime() + 7);
+    now.setDate(now.getDate() + 7);
 
     verif.expirationDate = now;
     verif.user = user._id;

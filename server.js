@@ -62,6 +62,8 @@ app.get('/signout', function(req, res) {
     res.redirect('/');
 });
 
+app.get('/verify', verification.runVerification);
+
 app.post('/forgotpassword/:userEmail', function(req, res) {
     var userEmail = req.params('userEmail');
     db.User.find({email: userEmail}, function(err, user) {
@@ -165,7 +167,7 @@ app.put('/mealshare/attend/:mealshareId', isLoggedIn, function(req, res) {
             console.log(err);
             return;
         }
-        mealshare.guests.push(attendingUser._id.toString());
+        mealshare.guests.push(attendingUser._id);
         mealshare.save(function(err) {
             if (err) {
                 console.log(err);
@@ -208,8 +210,10 @@ app.put('/mealshare/unattend/:mealshareId', isLoggedIn, function(req, res) {
             console.log(err);
             return;
         }
+        var uIndex = mealshare.guests.indexOf(unattendingUser._id);
+        if (uIndex != -1)
+            mealshare.guests.splice(uIndex, 1);
 
-        mealshare.guests.splice(indexOf(unattendingUser), 1);
         mealshare.save(function(err) {
             if (err) {
                 console.log(err);
@@ -230,7 +234,10 @@ app.put('/mealshare/unhost/:mealshareId', isLoggedIn, function(req, res) {
             console.log(err);
             return;
         }
-        mealshare.hosts.splice(indexOf(unhostingUser), 1);
+        var uIndex = mealshare.hosts.indexOf(unhostingUser._id);
+        if (uIndex != -1)
+            mealshare.hosts.splice(uIndex, 1);
+
         mealshare.save(function(err) {
             if (err) {
                 console.log(err);

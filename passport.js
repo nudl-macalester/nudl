@@ -36,7 +36,7 @@ module.exports.setup = function(passport) {
                         var nUser = new database.User();
 
                         bcrypt.genSalt(10, function(err, salt) {
-                            bcrypt.hash(password, salt, function(err, hash) {
+                            bcrypt.hash(password, salt, null, function(err, hash) {
                                 if (err)
                                     return done(err);
 
@@ -45,7 +45,7 @@ module.exports.setup = function(passport) {
                                 nUser.password = hash;
 
                                 // TODO: CHANGE THIS TO FALSE TO REQUIRE EMAIL VERIFICATION!!!
-                                nUser.verified = true;
+                                nUser.verified = false;
 
                                 nUser.save(function(err) {
                                     if (err)
@@ -99,7 +99,7 @@ function sendEmailVerification(user, vid) {
     mail.send({
         to: user.email,
         subject: "Welcome to NUDL",
-        body:'Hi!<br/><br/>Please follow the link below to verify your account on NUDL:<br/><a href="' + url + '/verify?tok=' + vid + '">Verify Account</a><br/><br/>Cheers,<br/>The PlaneChat Team'
+        body:'Hi!<br/><br/>Please follow the link below to verify your account on NUDL:<br/><a href="' + url + '/verify?tok=' + vid + '">Verify Account</a><br/><br/>Cheers,<br/>The NUDL Team'
     });
 }
 
