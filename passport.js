@@ -84,6 +84,22 @@ function sendEmailVerification(user, vid) {
     });
 }
 
+module.exports.sendEmailReset = function(user, tok) {
+    mail.send({
+        to: user.email,
+        subject: "Forgot NUDL password",
+        body:'Hi!<br/><br/>Please follow the link below to reset your account password:<br/><a href="' + url + '/reset?token=' + tok + '">Reset Password</a><br/><br/>Cheers,<br/>The NUDL Team'
+    })
+}
+
+module.exports.sendEmailResetConfirm = function (user) {
+    mail.send({
+        to: user.email,
+        subject: "NUDL password reset",
+        body:'Hi!<br/><br/>Your password has been reset.<br/><br/>Cheers,<br/>The NUDL Team'
+    })
+}
+
 module.exports.runVerification = function(req, res) {
     var tok = req.param('tok');
 

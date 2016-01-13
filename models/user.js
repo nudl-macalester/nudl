@@ -7,7 +7,9 @@ var userSchema = new Schema({
     password: String,
     email: String,
     verified: Boolean,
-    created_mealshares: [{ type: Schema.Types.ObjectId, ref: 'Mealshare' }]
+    created_mealshares: [{ type: Schema.Types.ObjectId, ref: 'Mealshare' }],
+    password_reset: String,
+    reset_expire: Date
 });
 
 userSchema.pre('save', function(next) {

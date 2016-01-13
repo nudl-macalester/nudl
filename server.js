@@ -10,8 +10,9 @@ var flash = require('connect-flash');
 var logger = require('morgan');
 var fs = require('fs');
 var mail = require('./mail');
-var verification = require('./passport');
+var auth = require('./passport');
 var http = require('http');
+var crypto = require('crypto');
 
 // Express setup
 var app = express();
@@ -36,7 +37,7 @@ app.use(cookieParser());
 app.use(flash());
 //app.use(app.router);
 
-verification.setup(passport);
+auth.setup(passport);
 
 
 
@@ -62,28 +63,75 @@ app.get('/signout', function(req, res) {
     res.redirect('/');
 });
 
-app.get('/verify', verification.runVerification);
+app.get('/verify', auth.runVerification);
 
-app.post('/forgot/:userEmail', function(req, res) {
-    var userEmail = req.params('userEmail');
-    db.User.find({email: userEmail}, function(err, user) {
+app.post('/forgot', function(req, res) {
+    var userEmail = req.body.email;
+    db.User.findOne({email: userEmail}, function(err, user) {
         if (err) {
             console.log(err);
             return;
         }
-
         if (!user) {
             res.status(404)
                 .send("email address not found!");
+            return;
         }
+
+        crypto.randomBytes(20, function(err, buf) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            var tok = buf.toString('hex');
+            user.password_reset = tok;
+            user.reset_expire = Date.now() + 3600000; // 1 hour
+            user.save(function(err) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                auth.sendEmailReset(user, tok);
+            });
+        });
+
+
         res.status(200)
-            .send("recovery email sent!");
+            .send("password reset email sent!");
     });
 });
 
-app.get('/password_recovery/:hash', function(req, res) {
-    res.status(200)
-        .send("recovered!");
+app.use('/reset', function(req, res, next) {
+    db.User.findOne({ password_reset: req.param('token'), reset_expire: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+            req.flash('error', 'Password reset token is invalid or has expired.');
+            return res.redirect('/forgot');
+        }
+        next();
+    });
+});
+
+app.post('/reset', function(req, res) {
+    db.User.findOne({ password_reset: req.param("token"), reset_expire: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+            req.flash('error', 'Password reset token is invalid or has expired.');
+            return res.redirect('/forgot');
+        }
+
+        user.password = req.body.password;
+        user.password_reset = undefined;
+        user.reset_expire = undefined;
+
+        user.save(function(err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            res.redirect('/');
+            auth.sendEmailResetConfirm(user);
+        });
+    });
 });
 
 app.get('/home/', isLoggedIn, function(req, res) {
