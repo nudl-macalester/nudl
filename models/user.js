@@ -39,7 +39,7 @@ userSchema.pre('save', function(next) {
     });
 });
 
-// METHODS
+// INSTANCE METHODS
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
@@ -55,7 +55,7 @@ userSchema.methods.generateVerification = function() {
     this.expires = Date.now() + 4 * 3600000; // set auto deletion of user after 4 hours of non-validation
 }
 
-// STATICS
+// STATIC METHODS
 
 userSchema.statics.verify = function(tok, cb) {
 
