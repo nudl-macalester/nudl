@@ -9,7 +9,11 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports.send = function(obj) {
+// Must change for production
+var url = "http://0.0.0.0:3000";
+
+
+sendEmail = function(obj) {
     var from = 'from' in obj ? obj.from : 'no-reply@nudl.co';
     var to = obj.to;
     var subject = 'subject' in obj ? obj.subject : 'NUDL message';
@@ -28,3 +32,27 @@ module.exports.send = function(obj) {
         }
     });
 };
+
+module.exports.sendEmailVerification = function(user) {
+    sendEmail({
+        to: user.email,
+        subject: "Welcome to NUDL",
+        body:'Hi!<br/><br/>Please follow the link below to verify your account on NUDL:<br/><a href="' + url + '/verify?token=' + user.verify_string + '">Verify Account</a><br/><br/>Cheers,<br/>The NUDL Team'
+    });
+}
+
+module.exports.sendEmailReset = function(user) {
+    sendEmail({
+        to: user.email,
+        subject: "Forgot NUDL password",
+        body:'Hi!<br/><br/>Please follow the link below to reset your account password:<br/><a href="' + url + '/reset?token=' + user.password_reset + '">Reset Password</a><br/><br/>Cheers,<br/>The NUDL Team'
+    });
+}
+
+module.exports.sendEmailResetConfirm = function (user) {
+    sendEmail({
+        to: user.email,
+        subject: "NUDL password reset",
+        body:'Hi!<br/><br/>Your password has been reset.<br/><br/>Cheers,<br/>The NUDL Team'
+    });
+}
