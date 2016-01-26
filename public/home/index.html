@@ -7,6 +7,7 @@
 	<script>CREATEDMEALSHARESHERE</script>
 	<script>ATTENDINGMEALSHARESHERE</script>
 	<script>HOSTINGMEALSHARESHERE</script>
+    <script>OTHERMEALSHARESHERE</script>
 	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
 	<script src="home.js"></script>
@@ -45,16 +46,19 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
-                    <a class="page-scroll" href="#about">About</a>
+                    <a class="page-scroll" href="#about">Mealshares</a>
                 </li>
                 <li class="">
-                    <a class="page-scroll" href="#services">Mealshare</a>
+                    <a class="page-scroll" href="#services">Host</a>
                 </li>
                 <li class="">
-                    <a class="page-scroll" href="#portfolio">@Mac</a>
+                    <a class="page-scroll" href="#portfolio">FAQs</a>
                 </li>
                 <li class="">
-                    <a class="page-scroll" href="#contact">Login</a>
+                    <a class="page-scroll" href="#contact">About</a>
+                </li>
+                <li class="">
+                    <a class="page-scroll" href="/signout">Sign out</a>
                 </li>
             </ul>
         </div>
@@ -63,8 +67,62 @@
     <!-- /.container-fluid -->
 </nav>
 
-<div>
-<h1>Welcome, you're logged in.</h1>
+<div id="home-content" class="container">
+<div class="row">
+<div id="center-div" class="col-md-2">
+
+<div id="mealshare-list-container">
+    <label><input type="checkbox" data-bind="checked: displayOthers" /> Display Other Mealshares</label>
+    <label><input type="checkbox" data-bind="checked: displayCreated" /> Display My Mealshares</label>
+    <label><input type="checkbox" data-bind="checked: displayHosting" /> Display Mealshares I'm Co-Hosting</label>
+    <label><input type="checkbox" data-bind="checked: displayAttending"/> Display Mealshares I'm Attending</label>
+
+    <div data-bind="if: displayOthers">
+        <ul data-bind="foreach: otherMealshares">
+            <li>
+                <div class="mealshare-container">
+                    <label data-bind="text: name"></label>
+                    <p data-bind="text: description"></p>
+                    <a class="btn btn-mealshare" data-bind="click: $parent.attend">Attend</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div data-bind="if: displayCreated">
+        <ul data-bind="foreach: createdMealshares">
+            <li>
+                <div class="mealshare-container">
+                    <label data-bind="text: name"></label>
+                    <p data-bind="text: description"></p>
+                    <a class="btn btn-mealshare" data-bind="click: $parent.delete">Delete</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div data-bind="if: displayHosting">
+        <ul data-bind="foreach: hostingMealshares">
+            <li>
+                <div class="mealshare-container">
+                    <label data-bind="text: name"></label>
+                    <p data-bind="text: description"></p>
+                    <a class="btn btn-mealshare" data-bind="click: $parent.attend">Unhost</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div data-bind="if: displayAttending">
+        <ul data-bind="foreach: attendingMealshares">
+            <li>
+                <div class="mealshare-container">
+                    <label data-bind="text: name"></label>
+                    <p data-bind="text: description"></p>
+                    <a class="btn btn-mealshare" data-bind="click: $parent.unattend">Unattend</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
 
 <h2>Create a new mealshare</h2>
 <form id="new_mealshare_form" data-bind="submit: create">
@@ -80,45 +138,8 @@
     <textarea rows="4" cols="50" name="description" form="new_mealshare_form"></textarea><br>
     <button type="submit">GO</button>
 </form>
-
-<h2>Here are the mealshares you've created</h2>
-<div id="created_mealshares">
-	<ul data-bind="foreach: createdMealshares">
-		<li>
-			<label data-bind="text: name"></label>
-		</li>
-	</ul>
 </div>
-
-<h2>Here are the mealshares you are co-hosting</h2>
-<div id="hosting_mealshares">
-	<ul data-bind="foreach: hostingMealshares">
-		<li>
-			<label data-bind="text: name"></label>
-		</li>
-	</ul>
 </div>
-
-<h2>Here are all mealshares you are attending</h2>
-<div id="attending_mealshares">
-	<ul data-bind="foreach: attendingMealshares">
-		<li>
-			<label data-bind="text: name"></label>
-			<button data-bind="click: $parent.unattend">Unattend</button>
-		</li>
-	</ul>
-</div>
-
-<h2>Here are all mealshares</h2>
-<div id="all_mealshares">
-	<ul data-bind="foreach: allMealshares">
-		<li>
-			<label data-bind="text: name"></label>
-			<button data-bind="click: $parent.attend">Attend</button>
-		</li>
-	</ul>
-</div>
-<a href="/signout"> Sign Out </a>
 </div>
 </body>
 </html>

@@ -2,3 +2,28 @@
     border-color: rgba(255,255,255,.3);
     background-color: #FF8500;
 }
+
+#center-div {
+	width: 50%;
+}
+
+#home-content {
+	margin-top: 70px;
+}
+
+.mealshare-container {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 5px;
+	color: #FFFFFF;
+	background-color: #FF8500;
+	border-color: rgba(255,255,255,.3);
+}
+
+.btn-mealshare {
+	color: #FFFFFF;
+}
+
+ul {
+	list-style-type: none;
+}

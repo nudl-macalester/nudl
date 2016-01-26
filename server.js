@@ -46,11 +46,17 @@ require('./routes/auth.js')(app);
 
 
 app.get('/home/', isLoggedIn, function(req, res) {
+    
+
     var userId = req.user._id;
+    // var userId = "56a5803eb7f4d4922a771627"; // USEFUL FOR TESTING
+
+
     var allMealsharesString = null;
     var createdMealsharesString = null;
     var attendingMealsharesString = null;
     var hostingMealsharesString = null;
+    var otherMealsharesString = null;
 
     var homeDocPath = path.join(process.cwd(), '/public/home/index.html');
 
@@ -62,15 +68,22 @@ app.get('/home/', isLoggedIn, function(req, res) {
         var createdMealshares = [];
         var attendingMealshares = [];
         var hostingMealshares = [];
+        var otherMealshares = [];
 
         for (var i = 0; i < mealshares.length; i++) {
             var mealshare = mealshares[i];
-            if (mealshare.creator.toString() == userId.toString())
+
+            if (mealshare.creator.toString() == userId.toString()) {
                 createdMealshares.push(mealshare);
-            else if (mealshare.guests && mealshare.guests.indexOf(userId) != -1)
+            }
+            else if (mealshare.guests && mealshare.guests.indexOf(userId) != -1) {
                 attendingMealshares.push(mealshare);
-            else if (mealshare.hosts && mealshare.hosts.indexOf(userId) != -1)
+            }
+            else if (mealshare.hosts && mealshare.hosts.indexOf(userId) != -1) {
                 hostingMealshares.push(mealshare);
+            } else {
+                otherMealshares.push(mealshare);
+            }
         }
         fs.readFile(homeDocPath, 'utf8', 'r+', function(err, homeDoc) {
             if (err) {
@@ -81,15 +94,17 @@ app.get('/home/', isLoggedIn, function(req, res) {
             createdMealsharesString = "var createdMealshares = " + JSON.stringify(createdMealshares) + ";";
             attendingMealsharesString = "var attendingMealshares = " + JSON.stringify(attendingMealshares) + ";";
             hostingMealsharesString = "var hostingMealshares = " + JSON.stringify(hostingMealshares) + ";";
+            otherMealsharesString = "var otherMealshares = " + JSON.stringify(otherMealshares) + ";";
 
             homeDoc = homeDoc.replace(/ALLMEALSHARESHERE/g, allMealsharesString);
             homeDoc = homeDoc.replace(/CREATEDMEALSHARESHERE/g, createdMealsharesString);
             homeDoc = homeDoc.replace(/ATTENDINGMEALSHARESHERE/g, attendingMealsharesString);
             homeDoc = homeDoc.replace(/HOSTINGMEALSHARESHERE/g, hostingMealsharesString);
+            homeDoc = homeDoc.replace(/OTHERMEALSHARESHERE/g, otherMealsharesString);
             res.send(homeDoc);
-        })
+        });
 
-    })
+    });
 });
 
 // mealshare edit/create/delete routes

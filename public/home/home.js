@@ -7,6 +7,13 @@ $(function() {
         self.attendingMealshares = ko.observableArray(attendingMealshares);
         self.allMealshares = ko.observableArray(allMealshares);
 
+        self.otherMealshares = ko.observableArray(otherMealshares);
+
+        self.displayOthers = ko.observable(true);
+        self.displayCreated = ko.observable(false);
+        self.displayHosting = ko.observable(false);
+        self.displayAttending = ko.observable(false);
+
         self.create = function(data) {
 
             $.ajax({
@@ -20,6 +27,10 @@ $(function() {
             });
         }
 
+        self.delete = function(data) {
+            console.log("delete clicked");
+        }
+
         self.attend = function(data) {
 
             $.ajax({
@@ -27,6 +38,8 @@ $(function() {
                 type: 'PUT',
                 success: function(ms) {
                     self.attendingMealshares.push(ms);
+                    self.otherMealshares.splice(self.otherMealshares.indexOf(ms), 1);
+
                 },
                 data: null,
                 contentType: "application/json; charset=utf-8"
@@ -40,6 +53,7 @@ $(function() {
                 type: 'PUT',
                 success: function(ms) {
                     self.attendingMealshares.splice(self.attendingMealshares.indexOf(ms), 1);
+                    self.otherMealshares.push(ms);
                 },
                 data: null,
                 contentType: "application/json; charset=utf-8"
