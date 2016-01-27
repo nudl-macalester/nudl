@@ -40,17 +40,15 @@ app.use(flash());
 auth.setup(passport);
 
 require('./routes/auth.js')(app);
+require('./routes/mealshare.js')(app);
 
 
 // routes
 
 
 app.get('/home/', isLoggedIn, function(req, res) {
-    
-
     var user = req.user;
     // var userId = "56a5803eb7f4d4922a771627"; // USEFUL FOR TESTING
-
 
     var mealsharesString = null;
 
@@ -69,122 +67,6 @@ app.get('/home/', isLoggedIn, function(req, res) {
             res.send(homeDoc);
         });
 
-    });
-});
-
-// mealshare edit/create/delete routes
-app.post('/mealshare/new', isLoggedIn, function(req, res) {
-    var creatingUser = req.user;
-
-    var nMS = new db.Mealshare();
-
-    nMS.creator = creatingUser;
-    nMS.name = req.body.name;
-    nMS.description = req.body.description;
-    nMS.hosts.push(creatingUser);
-    nMS.max_guests = req.body.max_guests;
-    nMS.time = new Date();
-    // nMS.hosts = req.body.hosts;
-    // nMS.guests = req.body.guests;
-    nMS.save(function(err) {
-        if (err)
-            res.status(500)
-                .send("Error saving new mealshare");
-        creatingUser.created_mealshares.push(nMS._id);
-        creatingUser.save();
-        res.status(200)
-            .send(nMS);
-    });
-});
-
-app.put('/mealshare/attend/:mealshareId', isLoggedIn, function(req, res) {
-    var attendingUser = req.user;
-    var mealshareId = req.param("mealshareId");
-
-    db.Mealshare.findById(mealshareId, function(err, mealshare) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        mealshare.guests.push(attendingUser._id);
-        mealshare.save(function(err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            res.status(200)
-                .send(mealshare);
-        });
-    });
-
-});
-
-app.put('/mealshare/host/:mealshareId', isLoggedIn, function(req, res) {
-    var hostingUser = req.user;
-    var mealshareId = req.param("mealshareId");
-
-    db.Mealshare.findById(mealshareId, function(err, mealshare) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        mealshare.hosts.push(hostingUser._id.toString());
-        mealshare.save(function(err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            res.status(200)
-                .send(mealshare);
-        });
-    });
-});
-
-app.put('/mealshare/unattend/:mealshareId', isLoggedIn, function(req, res) {
-    var unattendingUser = req.user;
-    var mealshareId = req.param("mealshareId");
-
-    db.Mealshare.findById(mealshareId, function(err, mealshare) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        var uIndex = mealshare.guests.indexOf(unattendingUser._id);
-        if (uIndex != -1)
-            mealshare.guests.splice(uIndex, 1);
-
-        mealshare.save(function(err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            res.status(200)
-                .send(mealshare);
-        });
-    });
-});
-
-app.put('/mealshare/unhost/:mealshareId', isLoggedIn, function(req, res) {
-    var unhostingUser = req.user;
-    var mealshareId = req.param("mealshareId");
-
-    db.Mealshare.findById(mealshareId, function(err, mealshare) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        var uIndex = mealshare.hosts.indexOf(unhostingUser._id);
-        if (uIndex != -1)
-            mealshare.hosts.splice(uIndex, 1);
-
-        mealshare.save(function(err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            res.status(200)
-                .send(mealshare);
-        });
     });
 });
 

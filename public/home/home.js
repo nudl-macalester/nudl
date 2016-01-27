@@ -1,15 +1,12 @@
 $(function() {
     function AppViewModel() {
         var self = this;
-        self.mealshares = ko.observableArray(mealshares);
+        self.mealshares = ko.observableArray(mealshares).extend({notify: 'always'});
 
         self.displayOthers = ko.observable(true);
         self.displayCreated = ko.observable(false);
         self.displayHosting = ko.observable(false);
         self.displayAttending = ko.observable(false);
-
-        var viewingMealshares = true;
-        self.viewingMealshares = ko.observable(viewingMealshares);
 
         self.create = function(data) {
 
@@ -29,17 +26,16 @@ $(function() {
         }
 
         self.attend = function(data) {
-
             $.ajax({
                 url: '/mealshare/attend/' + data.id,
                 type: 'PUT',
                 success: function(ms) {
-                    console.log("test");
                     data.isGuest = true;
                 },
                 data: null,
                 contentType: "application/json; charset=utf-8"
             });
+            // self.displayOthers = false;
         }
 
         self.unattend = function(data) {
@@ -53,14 +49,6 @@ $(function() {
                 data: null,
                 contentType: "application/json; charset=utf-8"
             });
-        }
-
-        self.viewMealshares = function() {
-            viewingMealshares = ko.observable(true);
-        }
-
-        self.viewHostingForm = function() {
-            viewingMealshares = ko.observable(false);
         }
     }
 
