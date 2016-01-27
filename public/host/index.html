@@ -7,9 +7,14 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
 	<script src="host.js"></script>
 
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
 	<!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/../css/bootstrap.min.css" type="text/css">
-
+    
+    <!-- jQuery ui CSS -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <!-- Custom Fonts -->
     <link href="/../css/css" rel="stylesheet" type="text/css">
     <link href="/../css/css(1).css" rel="stylesheet" type="text/css">
@@ -69,15 +74,17 @@
 <div id="hosting-form-container" data-bind="if: viewingHostForm">
 
     <h2>Create a new mealshare</h2>
-    <form id="new_mealshare_form" data-bind="submit: create">
-        <label for="name">mealshare name:</label>
+    <form id="new_mealshare_form">
+        <label for="name">Name:</label>
         <input type="text" name="name"><br>
         <label for="max_guests">maximum number of guests:</label>
         <input type="number" name="max_guests" min="1"><br>
-        <label for="hosts">hosts:</label>
+<!--         <label for="hosts">hosts:</label>
         <input type="text" name="hosts"><br>
-        <label for="guests">guests:</label>
-        <input type="text" name="guests"><br>
+        <label for="guests">guests:</label> 
+        <input type="text" name="guests"><br> -->
+        <label for="date">Date:</label>
+        <input type="text" id="datepicker"><br>
         <label for="description">description:</label>
         <textarea rows="4" cols="50" name="description" form="new_mealshare_form"></textarea><br>
         <button type="submit">GO</button>

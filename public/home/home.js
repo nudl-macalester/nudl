@@ -8,19 +8,6 @@ $(function() {
         self.displayHosting = ko.observable(false);
         self.displayAttending = ko.observable(false);
 
-        self.create = function(data) {
-
-            $.ajax({
-                url:'/mealshare/new',
-                type: 'POST',
-                success: function(ms) {
-                    self.createdMealshares.push(ms);
-                    self.allMealshares.push(ms);
-                },
-                data: $('#new_mealshare_form').serialize()
-            });
-        }
-
         self.delete = function(data) {
             console.log("delete clicked");
         }
@@ -54,4 +41,3 @@ $(function() {
 
     ko.applyBindings(new AppViewModel());
 });
- 

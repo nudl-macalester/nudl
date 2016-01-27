@@ -3,7 +3,6 @@ var db = require('../database');
 module.exports = function(app) {
 
     app.post('/mealshare/new', isLoggedIn, function(req, res) {
-        var creatingUser = req.user;
 
         db.Mealshare.create(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(),
             function(err, ms) {

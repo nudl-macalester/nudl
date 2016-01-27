@@ -70,6 +70,8 @@ app.get('/home/', isLoggedIn, function(req, res) {
     });
 });
 
+app.use('/host/', isLoggedIn);
+
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated() && req.user.verified) {

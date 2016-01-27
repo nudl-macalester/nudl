@@ -148,10 +148,10 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
         	cb(err);
         	return;
         }
-        creatingUser.created_mealshares.push(nMS._id);
-        creatingUser.save();
+        user.created_mealshares.push(nMS._id);
+        user.save();
 
-        var fEMS = new frontEndMealshares(nMS);
+        var fEMS = new frontEndMealshare(nMS);
         fEMS.isCreator = true;
 
         cb(null, fEMS);
