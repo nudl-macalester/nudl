@@ -1,0 +1,16 @@
+#login input{
+	color: #000000;
+	border-radius: 5px;
+
+}
+#loginCont{
+        width: 70%;
+        clear: both;
+    }
+#loginCont input {
+        width: 100%;
+        clear: both;
+    }
+#name{
+
+}

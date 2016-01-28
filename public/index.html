@@ -23,7 +23,7 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/creative.css" type="text/css">
-
+    <link rel="stylesheet" type="text/css" href="./css/landing.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -244,32 +244,30 @@
     </aside>
 
     <section  id = "login">
-        <div class="container">
+        <div class="container" id="loginCont">
             <div class= "row">
-                <div class="col-lg-6 text-center">
-                    <h3 text-decoration: underline;>Sign Up</h3><br>
+                <div class="col-lg-4 text-center">
+                    <h3 >Sign Up</h3><br>
                     <form id="signupForm" action="/signup" method="POST" class="form-box">
-                        <label for="name" class= "text-faded">Name:</label>
-                        <input type="text" name="name" placeholder="Name"><br>
-                        <label for="email" class= "text-faded">Email:</label>
-                        <input type="email" name="email" placeholder = "Email" ><br>
-                        <label for="password" class= "text-faded">Password:</label>
-                        <input type="password" name="password" id="pass" placeholder="Password" ><br>
-                        <label for="confirm" class= "text-faded">Confirm:</label>
-                        <input type="password" name="confirm" id="conf"><br>
+                        <label for="name" >Name:</label>
+                        <input type="text" name="name" placeholder="Name" id="name"><br>
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" placeholder = "Email" id="email" ><br>
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="pass" placeholder="Password" id="password" ><br>
+                        <label for="confirm">Confirm:</label>
+                        <input type="password" name="confirm" id="conf" placeholder="Confirm Password"><br><br>
                         <button type="submit" class="btn btn-default btn-l">GO</button>
                     </form>
                 </div>
-                <div class="verticalLine">
-
-                </div>
-                <div class="col-lg-6 text-center">
+                <div class="col-lg-4 text-center"></div>
+                <div class="col-lg-4 text-center">
                     <h3>Login</h3><br>
                     <form id="signinForm" action="/signin" method="POST">
                         <label for="email">Email:</label>
                         <input type="email" name="email" placeholder = "Email"><br>
                         <label for="password">Password:</label>
-                        <input type="password" name="password" placeholder="Password"><br>
+                        <input type="password" name="password" placeholder="Password"><br><br>
                         <button type="submit" class="btn btn-default btn-l">GO</button>
                     </form> 
                     <a href="/forgot">Forget your password?</a>
