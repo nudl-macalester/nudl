@@ -143,6 +143,10 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
     nMS.time = dateTime;
     // nMS.hosts = req.body.hosts;
     // nMS.guests = req.body.guests;
+
+    if (dateTime < new Date()) {
+    	cb("cannot create a mealshare before current time");
+    }
     nMS.save(function(err) {
         if (err) {
         	cb(err);
@@ -160,7 +164,7 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
 
 // we don't want to give all users access to all fields, and we don't want userids in the lists, so we filter a little for the specific user
 mealshareSchema.statics.getFrontEndMealsharesForUser = function(user, cb) {
-	Mealshare.find({}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
+	Mealshare.find({time: { $gt: Date.now() }}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
 		if (err) {
 			return cb(err);
 		}

@@ -10,3 +10,15 @@
 #home-content {
 	margin-top: 70px;
 }
+
+#new_mealshare_form input {
+	width: 100%;
+}
+
+#new_mealshare_form .timepicker {
+	width: 40%;
+}
+
+#new_mealshare_form .datepicker {
+	width: 60%;
+}

@@ -5,10 +5,18 @@
     <title>Host</title>
 	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
-	<script src="host.js"></script>
+	
+    <!-- date and time pickers -->
+    <script src="/../js/picker.js"></script>
+    <script src="/../js/picker.time.js"></script>
+    <script src="/../js/picker.date.js"></script>
 
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="host.js"></script>
+
+
+<!-- 
+    // <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    // <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> -->
 
 	<!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/../css/bootstrap.min.css" type="text/css">
@@ -22,6 +30,11 @@
 
     <!-- Plugin CSS -->
     <link rel="stylesheet" href="/../css/animate.min.css" type="text/css">
+
+    <!-- date and time pickers -->
+    <link rel="stylesheet" href="/../css/classic.css">
+    <link rel="stylesheet" href="/../css/classic.date.css">
+    <link rel="stylesheet" href="/../css/classic.time.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/../css/creative.css" type="text/css">
@@ -69,22 +82,24 @@
 
 <div id="home-content" class="container">
 <div class="row">
-<div id="center-div" class="col-md-6">
+<div id="center-div" class="col-md-10">
 
 <div id="hosting-form-container" data-bind="if: viewingHostForm">
 
     <h2>Create a new mealshare</h2>
     <form id="new_mealshare_form">
-        <label for="name">Name:</label>
-        <input type="text" name="name"><br>
-        <label for="max_guests">maximum number of guests:</label>
-        <input type="number" name="max_guests" min="1"><br>
+        <!-- <label for="name">Name:</label> -->
+        <input type="text" placeholder="Mealshare Name" name="name"><br><br>
+        <!-- <label for="max_guests">maximum number of guests:</label> -->
+        <input type="number" name="max_guests" min="1" placeholder="Number of Guests"><br><br>
 <!--         <label for="hosts">hosts:</label>
         <input type="text" name="hosts"><br>
         <label for="guests">guests:</label> 
         <input type="text" name="guests"><br> -->
-        <label for="date">Date:</label>
-        <input type="text" id="datepicker"><br>
+        <!-- <label for="date">Date:</label> -->
+        <input type="text" class="datepicker" placeholder="Date" name="date"><br>
+        <!-- <label for="time">Time:</label> -->
+        <input type="text" class="timepicker" placeholder="Time" name="time"><br><br>
         <label for="description">description:</label>
         <textarea rows="4" cols="50" name="description" form="new_mealshare_form"></textarea><br>
         <button type="submit">GO</button>

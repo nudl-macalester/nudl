@@ -4,7 +4,7 @@ module.exports = function(app) {
 
     app.post('/mealshare/new', isLoggedIn, function(req, res) {
 
-        db.Mealshare.create(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(),
+        db.Mealshare.create(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(req.body.date + " " + req.body.time),
             function(err, ms) {
                 if (err) {
                     res.status(500)
