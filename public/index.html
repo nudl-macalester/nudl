@@ -45,7 +45,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="http://ironsummitmedia.github.io/startbootstrap-creative/#page-top">NÜDL</a>
+                <a class="navbar-brand page-scroll" href="#page-top">NÜDL</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -61,7 +61,7 @@
                         <a class="page-scroll" href="#portfolio">@Mac</a>
                     </li>
                     <li class="">
-                        <a class="page-scroll" href="#contact">Login</a>
+                        <a class="page-scroll" href="#login">Login</a>
                     </li>
                 </ul>
             </div>
@@ -243,6 +243,39 @@
         </div>
     </aside>
 
+    <section  id = "login">
+        <div class="container">
+            <div class= "row">
+                <div class="col-lg-6 text-center">
+                    <h3>Sign Up</h3><br>
+                    <form id="signupForm" action="/signup" method="POST">
+                        <label for="name">Name:</label>
+                        <input type="text" name="name" placeholder="Name"><br>
+                        <label for="email">Email:</label>
+                        <input type="email" name="email"><br>
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="pass"><br>
+                        <label for="confirm">Confirm:</label>
+                        <input type="password" name="confirm" id="conf"><br>
+                        <button type="submit">GO</button>
+                    </form>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <h3>Login</h3><br>
+                    <form id="signinForm" action="/signin" method="POST">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email"><br>
+                        <label for="password">Password:</label>
+                        <input type="password" name="password"><br>
+                        <button type="submit">GO</button>
+                    </form> 
+                    <a href="/forgot">Forget your password?</a>
+                </div>
+            </div>
+        </div> 
+    </section>
+
+
     <section id="contact">
         <div class="container">
             <div class="row">
@@ -256,7 +289,7 @@
                     <p style="color:#FF8524;">Facebook</p>
                 </div>
                 <div class="col-lg-3 text-center">
-                    <i class="fa fa-envelope-o fa-3x wow bounceIn" data-wow-delay=".1s" style="visibility: visible; animation-delay: 0.1s; animation-name: bounceIn;"></i>
+                    <i class="fa fa-envelope-o fa-3x wow bounceIn" data-wow-delay=".1sl" style="visibility: visible; animation-delay: 0.1s; animation-name: bounceIn;"></i>
                     <p><a href="mailto:your-email@your-domain.com">questions@nudl.co</a></p>
                 </div>
             </div>
