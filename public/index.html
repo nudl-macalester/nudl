@@ -88,7 +88,7 @@
                     <h2 class="section-heading">We're bringing communal meals to the 21st century!</h2>
                     <hr class="light">
                     <p class="text-faded">Enough with the microwave meals! Dinners can be social, convenient, and healthy. NÜDL brings guests to the table, so all you do is cook. Our network is free and easy to use - no strings attached.</p>
-                    <a href="http://ironsummitmedia.github.io/startbootstrap-creative/#" class="btn btn-default btn-xl">Register</a>
+                    <a href="#login" class="btn btn-default btn-xl">Register</a>
                 </div>
             </div>
         </div>
@@ -247,27 +247,30 @@
         <div class="container">
             <div class= "row">
                 <div class="col-lg-6 text-center">
-                    <h3>Sign Up</h3><br>
-                    <form id="signupForm" action="/signup" method="POST">
-                        <label for="name">Name:</label>
+                    <h3 text-decoration: underline;>Sign Up</h3><br>
+                    <form id="signupForm" action="/signup" method="POST" class="form-box">
+                        <label for="name" class= "text-faded">Name:</label>
                         <input type="text" name="name" placeholder="Name"><br>
-                        <label for="email">Email:</label>
-                        <input type="email" name="email"><br>
-                        <label for="password">Password:</label>
-                        <input type="password" name="password" id="pass"><br>
-                        <label for="confirm">Confirm:</label>
+                        <label for="email" class= "text-faded">Email:</label>
+                        <input type="email" name="email" placeholder = "Email" ><br>
+                        <label for="password" class= "text-faded">Password:</label>
+                        <input type="password" name="password" id="pass" placeholder="Password" ><br>
+                        <label for="confirm" class= "text-faded">Confirm:</label>
                         <input type="password" name="confirm" id="conf"><br>
-                        <button type="submit">GO</button>
+                        <button type="submit" class="btn btn-default btn-l">GO</button>
                     </form>
+                </div>
+                <div class="verticalLine">
+
                 </div>
                 <div class="col-lg-6 text-center">
                     <h3>Login</h3><br>
                     <form id="signinForm" action="/signin" method="POST">
                         <label for="email">Email:</label>
-                        <input type="email" name="email"><br>
+                        <input type="email" name="email" placeholder = "Email"><br>
                         <label for="password">Password:</label>
-                        <input type="password" name="password"><br>
-                        <button type="submit">GO</button>
+                        <input type="password" name="password" placeholder="Password"><br>
+                        <button type="submit" class="btn btn-default btn-l">GO</button>
                     </form> 
                     <a href="/forgot">Forget your password?</a>
                 </div>

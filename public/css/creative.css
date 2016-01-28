@@ -23,6 +23,10 @@ hr {
 hr.light {
     border-color: #fff;
 }
+hr.light2{
+    border-color: #fff;
+    height: 30px;
+}
 
 a {
     color: #ff8524;
@@ -54,7 +58,10 @@ p {
 .bg-primary {
     background-color: #ff8524;
 }
-
+#login{
+    background:#ff8524; 
+    color: #fff; 
+}
 .bg-dark {
     color: #fff;
     background-color: #222;
@@ -473,4 +480,12 @@ img::-moz-selection {
 
 body {
     webkit-tap-highlight-color: #222;
+}
+
+.form-box{
+    border-radius: 5px
+}
+
+.verticalLine {
+    border-left: thick solid #ff0000;
 }
