@@ -4,7 +4,7 @@ module.exports = function(app) {
 
     app.post('/mealshare/new', isLoggedIn, function(req, res) {
 
-        db.Mealshare.create(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(req.body.date + " " + req.body.time),
+        db.Mealshare.create(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(req.body.date + " " + req.body.time), req.body.price,
             function(err, ms) {
                 if (err) {
                     res.status(500)
@@ -76,7 +76,15 @@ module.exports = function(app) {
     });
 
     app.delete('/mealshare/delete/:mealshareId', isLoggedIn, function(req, res) {
-        console.log(req.mealshare.creator);
+        req.mealshare.delete(req.user, function(err, msId) {
+            if (err) {
+                console.log(err);
+                res.status(500)
+                    .send("delete failed");
+            }
+            res.status(200)
+                .send(msId);
+        });
     });
 }
 

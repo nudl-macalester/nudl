@@ -9,7 +9,7 @@ var SALT_FACTOR = 5;
 var User;
 
 var userSchema = new Schema({
-    name: {type: String, required: true},
+    name: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     email: {type: String, required: true, unique: true},
 
@@ -53,6 +53,11 @@ userSchema.methods.generateVerification = function() {
     this.verified = false;
     this.verify_string = crypto.randomBytes(RANDOM_LENGTH).toString('hex');
     this.expires = Date.now() + 4 * 3600000; // set auto deletion of user after 4 hours of non-validation
+}
+
+userSchema.methods.isAdmin = function() {
+    var adminUserNames = /(Alex Dangel | Caitlin Toner | Pradyut Bansal | Emma Foti | Eivind Bakke)/;
+    return adminUserNames.test(this.name);
 }
 
 // STATIC METHODS

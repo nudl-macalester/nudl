@@ -13,7 +13,6 @@ $(function() {
                 url: '/mealshare/delete/' + data.id,
                 type: 'DELETE',
                 success: function(ms) {
-                    console.log("test!");
                 },
                 data: null,
                 contentType: "application/json; charset=utf-8"
@@ -30,7 +29,6 @@ $(function() {
                 data: null,
                 contentType: "application/json; charset=utf-8"
             });
-            // self.displayOthers = false;
         }
 
         self.unattend = function(data) {

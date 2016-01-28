@@ -20,6 +20,11 @@
 	border-color: rgba(255,255,255,.3);
 }
 
+.description-container {
+	background-color: #FFFAFA;
+	color: #000000;
+}
+
 .btn-mealshare {
 	color: #FFFFFF;
 }

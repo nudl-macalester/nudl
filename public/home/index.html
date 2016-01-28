@@ -81,9 +81,11 @@
                     <b><span data-bind="text: name"></span></b>
                     <span style="float: right;" data-bind="text: dateFormat(time, 'ddd, mmm dd hh:MM TT')"></span>
                     <br>
-                    <span>by: </span>
-                    <span data-bind="text: creator"></span>
-                    <p data-bind="text: description"></p>
+                    <span data-bind="text: 'by: ' + creator"></span>
+                    <span style="float: right;" data-bind="text: '$' + price"></span>
+                    <div class="description-container">
+                        <p data-bind="text: description"></p>
+                    </div>
                     <a class="btn btn-mealshare" data-bind="if: (!isGuest && !isHost && !isCreator), click: $parent.attend">Attend</a>
                     <a class="btn btn-mealshare" data-bind="if: isGuest, click: $parent.unattend">Unattend</a>
                     <a class="btn btn-mealshare" data-bind="if: isCreator, click: $parent.delete">Delete</a>

@@ -6,6 +6,7 @@ var Mealshare;
 var mealshareSchema = new Schema({
     name: String,
     description: String,
+    price: Number,
     creator: {type: Schema.Types.ObjectId, ref:'User'},
     hosts: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     guests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
@@ -109,6 +110,15 @@ mealshareSchema.methods.removeHost = function(user, cb) {
 	});
 }
 
+mealshareSchema.methods.delete = function(user, cb) {
+	var self = this;
+	if (self.creator._id.toString() == user._id.toString() || user.isAdmin()) {
+		self.remove(function(err) {
+			cb(err, self._id);
+		});
+	} 
+}
+
 // STATIC METHODS
 
 // Frontend Mealshare object
@@ -124,6 +134,7 @@ function frontEndMealshare(ms) {
     this.hosts = [];
     this.maxCapacity;
     this.fewSpotsLeft = ms.max_guests - ms.guests.length <= 3;
+    this.price = ms.price;
 
     this.index;
 
@@ -132,7 +143,7 @@ function frontEndMealshare(ms) {
     this.isGuest = false;
 }
 
-mealshareSchema.statics.create = function(user, name, description, maxCap, dateTime, cb) {
+mealshareSchema.statics.create = function(user, name, description, maxCap, dateTime, price, cb) {
 	var nMS = new Mealshare();
 
     nMS.creator = user;
@@ -141,6 +152,7 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
     nMS.hosts.push(user);
     nMS.max_guests = maxCap;
     nMS.time = dateTime;
+    nMS.price = price;
     // nMS.hosts = req.body.hosts;
     // nMS.guests = req.body.guests;
 
