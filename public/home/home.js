@@ -9,7 +9,15 @@ $(function() {
         self.displayAttending = ko.observable(false);
 
         self.delete = function(data) {
-            console.log("delete clicked");
+            $.ajax({
+                url: '/mealshare/delete/' + data.id,
+                type: 'DELETE',
+                success: function(ms) {
+                    console.log("test!");
+                },
+                data: null,
+                contentType: "application/json; charset=utf-8"
+            });
         }
 
         self.attend = function(data) {

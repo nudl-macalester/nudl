@@ -6,6 +6,7 @@
     <script>MEALSHARESHERE</script>
 	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
+    <script src="/../js/dateFormat.min.js"></script>
     <script src="home.js"></script>
 
 	<!-- Bootstrap Core CSS -->
@@ -77,7 +78,11 @@
         <ul data-bind="foreach: mealshares">
             <li data-bind="if: ((isCreator && $parent.displayCreated) || (isHost && $parent.displayHosting) || (isGuest && $parent.displayAttending) || (!isGuest && $parent.displayOthers))">
                 <div class="mealshare-container">
-                    <label data-bind="text: name"></label>
+                    <b><span data-bind="text: name"></span></b>
+                    <span style="float: right;" data-bind="text: dateFormat(time, 'ddd, mmm dd hh:MM TT')"></span>
+                    <br>
+                    <span>by: </span>
+                    <span data-bind="text: creator"></span>
                     <p data-bind="text: description"></p>
                     <a class="btn btn-mealshare" data-bind="if: (!isGuest && !isHost && !isCreator), click: $parent.attend">Attend</a>
                     <a class="btn btn-mealshare" data-bind="if: isGuest, click: $parent.unattend">Unattend</a>
