@@ -3,15 +3,19 @@
     background-color: #FF8500;
 }
 
-/*.navbar-header < a {
-	color: #ffffff;
-}*/
+.navbar-default .navbar-header .navbar-brand {
+	color: #777;
+}
 
 #home-content {
 	margin-top: 70px;
 }
 
 #new_mealshare_form input {
+	width: 100%;
+}
+
+#new_mealshare_form textarea {
 	width: 100%;
 }
 

@@ -28,6 +28,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/../css/creative.css" type="text/css">
     <link rel="stylesheet" href="host.css" type="text/css">
+    <link rel="icon" type="image/png" href="/img/nudl_fav/favicon-32x32.png" sizes="32x32" />
 </head>
 <body id="page-top">
 
@@ -70,9 +71,9 @@
     </nav>
 <div id="home-content" class="container">
 <div class="row">
-<div id="center-div" class="col-md-10">
+<div id="new-meal-div" class="col-md-4">
 
-<div id="hosting-form-container" data-bind="if: viewingHostForm">
+<div id="hosting-form-container">
 
     <h2>Create a new mealshare</h2>
     <form id="new_mealshare_form">
@@ -91,13 +92,17 @@
         <input type="number" placeholder="Price" min="2" name="price">
         <br><br>
 
-        <textarea rows="4" cols="40" name="description" form="new_mealshare_form" placeholder="Description"></textarea><br>
+        <textarea rows="4" name="description" form="new_mealshare_form" placeholder="Description"></textarea><br>
         <button type="submit">GO</button>
     </form>
 
 </div> <!-- hosting form conainer div end -->
 
-</div> <!-- center div end -->
+</div> <!-- new-meal-div end -->
+
+<div id="hosted-meals-div" class="col-md-8">
+
+</div>
 
 </div> <!-- row div end -->
 </div> <!-- home content div end -->
