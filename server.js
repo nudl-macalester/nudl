@@ -55,14 +55,13 @@ app.get('/home/', isLoggedIn, function(req, res) {
     var homeDocPath = path.join(process.cwd(), '/public/home/index.html');
 
     db.Mealshare.getFrontEndMealsharesForUser(user, function(err, mealshares) {
-        allMealsharesString = "var allMealshares = " + JSON.stringify(mealshares) + ";";
+        mealsharesString = "var mealshares = " + JSON.stringify(mealshares) + ";";
 
         fs.readFile(homeDocPath, 'utf8', 'r+', function(err, homeDoc) {
             if (err) {
                 conosole.log(err);
                 return;
             }
-            mealsharesString = "var mealshares = " + JSON.stringify(mealshares) + ";";
             homeDoc = homeDoc.replace(/MEALSHARESHERE/g, mealsharesString);
             res.send(homeDoc);
         });
@@ -70,7 +69,26 @@ app.get('/home/', isLoggedIn, function(req, res) {
     });
 });
 
-app.use('/host/', isLoggedIn);
+app.get('/host/', isLoggedIn, function(req, res) {
+    var user = req.user;
+
+    var mealsharesString = null;
+
+    var hostDocPath = path.join(process.cwd(), 'public/host/index.html');
+
+    db.Mealshare.getMealsharesCreatedByUser(user, function(err, mealshares) {
+        mealsharesString = "var mealshares = " + JSON.stringify(mealshares) + ";";
+
+        fs.readFile(hostDocPath, 'utf8', 'r+', function(err, hostDoc) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            hostDoc = hostDoc.replace(/MEALSHARESHERE/g, mealsharesString);
+            res.send(hostDoc);
+        });
+    });
+});
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {

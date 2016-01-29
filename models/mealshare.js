@@ -174,48 +174,64 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
     });
 }
 
+generateFrontEndMealsharesForUser = function(mealshares, user) {
+	var frontEndMealshares = [];
+
+	for (var i = 0; i < mealshares.length; i++) {
+        var mealshare = mealshares[i];
+        var fEMS = new frontEndMealshare(mealshare);
+
+        // public stuff
+        for (var j = 0; j < mealshare.hosts.length; j++) {
+        	var hostName = mealshare.hosts[j].name;
+        	fEMS.hosts.push(hostName);
+        }
+
+        fEMS.index = i;
+
+        // only the creator should see the full guest list
+        if (mealshare.creator._id.toString() == user._id.toString()) {
+        	fEMS.isCreator = true;
+        	fEMS.isHost = true;
+        	fEMS.maxCapacity = mealshare.max_guests;
+
+        	for (var j = 0; j < mealshare.guests.length; j++) {
+        		var guestName = mealshare.guests[j].name;
+        		fEMS.guests.push(guestName);
+        	}
+        }
+        else if (mealshare.userIsGuest(user) != -1) { // guests see nothing for now
+        	fEMS.isGuest = true;
+        }
+        else if (mealshare.userIsHost(user) != -1) { // hosts also see nothing for now
+            fEMS.isHost = true;
+        }
+        frontEndMealshares.push(fEMS);
+    }
+
+    return frontEndMealshares;
+}
+
 // we don't want to give all users access to all fields, and we don't want userids in the lists, so we filter a little for the specific user
 mealshareSchema.statics.getFrontEndMealsharesForUser = function(user, cb) {
 	Mealshare.find({time: { $gt: Date.now() }}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
 		if (err) {
 			return cb(err);
 		}
-		var frontEndMealshares = [];
-
-		for (var i = 0; i < mealshares.length; i++) {
-            var mealshare = mealshares[i];
-            var fEMS = new frontEndMealshare(mealshare);
-
-            // public stuff
-            for (var j = 0; j < mealshare.hosts.length; j++) {
-            	var hostName = mealshare.hosts[j].name;
-            	fEMS.hosts.push(hostName);
-            }
-
-            fEMS.index = i;
-
-            // only the creator should see the full guest list
-            if (mealshare.creator._id.toString() == user._id.toString()) {
-            	fEMS.isCreator = true;
-            	fEMS.isHost = true;
-            	fEMS.maxCapacity = mealshare.max_guests;
-
-            	for (var j = 0; j < mealshare.guests.length; j++) {
-            		var guestName = mealshare.guests[j].name;
-            		fEMS.guests.push(guestName);
-            	}
-            }
-            else if (mealshare.userIsGuest(user) != -1) { // guests see nothing for now
-            	fEMS.isGuest = true;
-            }
-            else if (mealshare.userIsHost(user) != -1) { // hosts also see nothing for now
-                fEMS.isHost = true;
-            }
-            frontEndMealshares.push(fEMS);
-        }
+		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
 
         cb(null, frontEndMealshares);
 
+	});
+}
+
+mealshareSchema.statics.getMealsharesCreatedByUser = function(user, cb) {
+	Mealshare.find({time: {$gt: Date.now() }, creator: user}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
+		if (err) {
+			return cb(err);
+		}
+		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
+		cb(null, frontEndMealshares);
 	});
 }
 
