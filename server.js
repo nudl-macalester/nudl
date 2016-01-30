@@ -76,7 +76,7 @@ app.get('/host/', isLoggedIn, function(req, res) {
 
     var hostDocPath = path.join(process.cwd(), 'public/host/index.html');
 
-    db.Mealshare.getFrontEndMealsharesForUser(user, function(err, mealshares) {
+    db.Mealshare.getUpcomingMealshares(user, function(err, mealshares) {
         mealsharesString = "var mealshares = " + JSON.stringify(mealshares) + ";";
 
         fs.readFile(hostDocPath, 'utf8', 'r+', function(err, hostDoc) {

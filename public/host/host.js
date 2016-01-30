@@ -16,7 +16,8 @@ $(function() {
 	$(".timepicker").pickatime({
 		formatSubmit: 'H:i:00',
 		hiddenName: true,
-		interval: 15
+		interval: 15,
+		min: [12, 00]
 	});
 
 	$('#new_mealshare_form').submit(function(e) {

@@ -243,6 +243,17 @@ mealshareSchema.statics.getMealsharesCreatedByUser = function(user, cb) {
 	});
 }
 
+mealshareSchema.statics.getUpcomingMealshares = function(user, cb) {
+	Mealshare.find({time: { $gt: Date.now() } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
+		if (err) {
+			return cb(err);
+		}
+		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
+
+        cb(null, frontEndMealshares);
+	});
+}
+
 Mealshare = mongoose.model('Mealshare', mealshareSchema);
 
 module.exports = {
