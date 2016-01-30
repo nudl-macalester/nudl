@@ -1,4 +1,10 @@
 $(function() {
+	function AppViewModel() {
+        var self = this;
+        self.mealshares = ko.observableArray(mealshares);
+    }
+    ko.applyBindings(new AppViewModel());
+
 	// $( "#datepicker" ).datepicker();
 	$(".datepicker").pickadate({
 		format: 'dddd, d mmmm',
@@ -6,6 +12,7 @@ $(function() {
 		hiddenName: true,
 		min: true
 	});
+
 	$(".timepicker").pickatime({
 		formatSubmit: 'H:i:00',
 		hiddenName: true,

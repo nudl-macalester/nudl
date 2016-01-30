@@ -102,7 +102,21 @@
 </div> <!-- new-meal-div end -->
 
 <div id="hosted-meals-div" class="col-md-8">
-
+    <div>
+        <h2>Other upcoming mealshares</h2>
+        <ul data-bind="foreach: mealshares">
+            <li>
+                <div class="mealshare-container">
+                    <b><span data-bind="text: name"></span></b>
+                    <span style="float: right;" data-bind="text: dateFormat(time, 'ddd, mmm dd hh:MM TT')"></span>
+                    <br>
+                    <span data-bind="text: 'by: ' + creator"></span>
+                    <span style="float: right;" data-bind="text: '$' + price"></span>
+                    <p data-bind="text: description"></p>
+                </div
+            </li>
+        </ul>
+    </div>
 </div>
 
 </div> <!-- row div end -->
@@ -127,6 +141,7 @@
     <script src="/../js/picker.js"></script>
     <script src="/../js/picker.time.js"></script>
     <script src="/../js/picker.date.js"></script>
+    <script src="/../js/dateFormat.min.js"></script>
 
     <script src="host.js"></script>
 

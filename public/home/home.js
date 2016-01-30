@@ -1,7 +1,7 @@
 $(function() {
     function AppViewModel() {
         var self = this;
-        self.mealshares = ko.observableArray(mealshares).extend({notify: 'always'});
+        self.mealshares = ko.observableArray(mealshares);
 
         self.displayOthers = ko.observable(true);
         self.displayCreated = ko.observable(false);

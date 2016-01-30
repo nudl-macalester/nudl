@@ -26,3 +26,16 @@
 #new_mealshare_form .datepicker {
 	width: 60%;
 }
+
+.mealshare-container {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 10px;
+	color: #FFFFFF;
+	background-color: #FF8500;
+	border-color: rgba(255,255,255,.3);
+}
+
+ul {
+	list-style-type: none;
+}
