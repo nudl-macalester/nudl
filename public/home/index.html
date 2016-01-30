@@ -87,11 +87,14 @@
                     <div class="description-container">
                         <p data-bind="text: description"></p>
                     </div>
-                    <a class="btn btn-mealshare" data-bind="if: (!isGuest && !isHost && !isCreator), click: $parent.attend">Attend</a>
-                    <a class="btn btn-mealshare" data-bind="if: isGuest, click: $parent.unattend">Unattend</a>
-                    <a class="btn btn-mealshare" data-bind="if: isCreator, click: $parent.delete">Delete</a>
-                    <a class="btn btn-mealshare" data-bind="if: isCreator, click: $parent.edit">Edit</a>
-                    <a class="btn btn-mealshare" data-bind="if: (isHost && !isCreator), click: $parent.unhost">Unhost</a>
+                    <a class="btn btn-mealshare" data-bind="visible: (!isGuest && !isHost && !isCreator), click: $parent.attend">Attend</a>
+                    <a class="btn btn-mealshare" data-bind="visible: isGuest, click: $parent.unattend">Unattend</a>
+                    <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.delete">Delete</a>
+                    <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.edit">Edit</a>
+                    <a class="btn btn-mealshare" data-bind="visible: (isHost && !isCreator), click: $parent.unhost">Unhost</a>
+                    <div id="few-spots-left-div" style="float: right;" data-bind="visible: fewSpotsLeft">
+                        Almost empty!
+                    </div>
                 </div
             </li>
         </ul>

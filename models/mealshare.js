@@ -11,7 +11,8 @@ var mealshareSchema = new Schema({
     hosts: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     guests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     time: Date,
-    max_guests: Number
+    max_guests: Number,
+    spots_left: Number
 });
 
 // INSTANCE METHODS
@@ -47,8 +48,11 @@ mealshareSchema.methods.addGuest = function(user, cb) {
 	if (self.userIsGuest(user) != -1) {
 		cb("user is already guest");
 		return;
+	} else if (self.spots_left == 0) {
+		cb("mealshare is full");
 	}
 	self.guests.push(user);
+	self.spots_left--;
 	self.save(function(err) {
 		if (err) {
 			cb(err);
@@ -84,6 +88,7 @@ mealshareSchema.methods.removeGuest = function(user, cb) {
 		return;
 	}
 	self.guests.splice(guestIndex, 1);
+	self.spots_left++;
 	self.save(function(err) {
 		if (err) {
 			cb(err);
@@ -133,7 +138,8 @@ function frontEndMealshare(ms) {
     this.guests = [];
     this.hosts = [];
     this.maxCapacity;
-    this.fewSpotsLeft = ms.max_guests - ms.guests.length <= 3;
+    this.spotsLeft;
+    this.fewSpotsLeft = ms.spots_left <= 3;
     this.price = ms.price;
 
     this.index;
@@ -151,6 +157,7 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
     nMS.description = description;
     nMS.hosts.push(user);
     nMS.max_guests = maxCap;
+    nMS.spots_left = maxCap;
     nMS.time = dateTime;
     nMS.price = price;
     // nMS.hosts = req.body.hosts;
@@ -194,6 +201,7 @@ generateFrontEndMealsharesForUser = function(mealshares, user) {
         	fEMS.isCreator = true;
         	fEMS.isHost = true;
         	fEMS.maxCapacity = mealshare.max_guests;
+        	fEMS.spotsLeft = mealshare.spots_left;
 
         	for (var j = 0; j < mealshare.guests.length; j++) {
         		var guestName = mealshare.guests[j].name;
@@ -214,7 +222,7 @@ generateFrontEndMealsharesForUser = function(mealshares, user) {
 
 // we don't want to give all users access to all fields, and we don't want userids in the lists, so we filter a little for the specific user
 mealshareSchema.statics.getFrontEndMealsharesForUser = function(user, cb) {
-	Mealshare.find({time: { $gt: Date.now() }}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
+	Mealshare.find({time: { $gt: Date.now() }, spots_left: { $gt: 0 } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
 		if (err) {
 			return cb(err);
 		}

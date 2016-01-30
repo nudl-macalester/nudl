@@ -11,6 +11,14 @@
 	margin-top: 70px;
 }
 
+#few-spots-left-div {
+	background-color: #FF0000;
+	padding: 10px;
+	padding-bottom: 7px;
+	border-radius: 3px;
+	margin-bottom: 4px;
+}
+
 .mealshare-container {
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -31,4 +39,7 @@
 
 ul {
 	list-style-type: none;
+	padding: 0;
 }
+
+
