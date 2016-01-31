@@ -86,6 +86,15 @@
                     <br>
                     <span data-bind="text: 'by: ' + creator"></span>
                     <span style="float: right;" data-bind="text: '$' + price"></span>
+                    <div data-bind="visible: isCreator && guests.length == 0">
+                        <span>No guests yet</span>
+                    </div>
+                    <div data-bind="visible: guests.length > 0">
+                        <span>Guests: </span>
+                        <!-- ko foreach: guests -->
+                        <span data-bind="text: ($data + ';')"></span>
+                        <!-- /ko -->
+                    </div>
                     <div class="description-container">
                         <p data-bind="text: description"></p>
                     </div>
@@ -111,6 +120,40 @@
 
 </div> <!-- row div end -->
 </div> <!-- home content div end -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit-title">Edit Mealshare</h4>
+      </div>
+      <div class="modal-body">
+            <form id="edit_mealshare_form">
+                <label for="name">Name:</label>
+                <input type="text" id="name-input" name="name"><br><br>
+                <label for="max_guests">Number of guests:</label>
+                <input type="number" id="capacity-input" name="max_guests" min="1">
+                <label for="date">Date:</label>
+                <input type="text" id="edit-date-input" class="datepicker" placeholder="Date" name="date"><br>
+                <label for="time">Time:</label>
+                <input type="text" id="edit-time-input" class="timepicker" placeholder="Time" name="time">
+                <label for="price">Price:</label>
+                <input type="number" id="price-input" placeholder="Price" min="2" name="price">
+                <br><br>
+
+                <textarea rows="4" id="description-input" name="description" form="new_mealshare_form" placeholder="Description -- Location, Dietary restrictions, Alergens etc."></textarea><br>
+            </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="edit-save-button" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- jQuery -->
     <script src="/../js/jquery.js"></script>

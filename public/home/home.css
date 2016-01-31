@@ -32,6 +32,14 @@
 	background-color: rgba(0,0,0,0.35);
 }
 
+#edit_mealshare_form input {
+	width: 100%;
+}
+
+#edit_mealshare_form textarea {
+	width: 100%;
+}
+
 .ms-warning-label {
 	float: right;
 	padding: 10px;

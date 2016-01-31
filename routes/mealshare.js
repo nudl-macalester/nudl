@@ -15,7 +15,7 @@ module.exports = function(app) {
         });
     });
 
-    app.all('/mealshare/:action(attend|unattend|host|unhost|delete)/:mealshareId', isLoggedIn, function(req, res, next) {
+    app.all('/mealshare/:action(attend|unattend|host|unhost|delete|edit)/:mealshareId', isLoggedIn, function(req, res, next) {
         var mealshareId = req.param("mealshareId");
         db.Mealshare.findById(mealshareId).populate('creator hosts guests').exec(function(err, mealshare) {
             if (err) {
@@ -73,6 +73,11 @@ module.exports = function(app) {
             res.status(200)
                 .send(ms);
         });
+    });
+
+    app.put('/mealshare/edit/:mealshareId', isLoggedIn, function(req, res) {
+        res.status(200)
+            .send(req.mealshare.name);
     });
 
     app.delete('/mealshare/delete/:mealshareId', isLoggedIn, function(req, res) {

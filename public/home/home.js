@@ -1,4 +1,5 @@
 $(function() {
+
     function AppViewModel() {
         var self = this;
         self.mealshares = ko.observableArray(mealshares);
@@ -9,7 +10,6 @@ $(function() {
         self.displayAttending = ko.observable(false);
 
         self.displayThis = function(isGuest, isCreator) {
-            console.log(self.displayAll());
             return self.displayAll() || (isCreator && self.displayCreated()) || (isGuest && self.displayAttending());
         }
 
@@ -23,6 +23,28 @@ $(function() {
                 data: null,
                 contentType: "application/json; charset=utf-8"
             });
+        }
+
+        self.edit = function(data) {
+            $('#name-input').val(data.name);
+            $('#capacity-input').val(data.maxCapacity);
+            $('#price-input').val(data.price);
+            $('#description-input').val(data.description);
+            $('#edit-date-input').val(dateFormat(data.time, 'mm/dd'));
+            $('#edit-time-input').val(dateFormat(data.time, 'HH:MM'));
+
+            $('#edit-save-button').click(function() {
+                $.ajax({
+                    url:'/mealshare/edit/' + data.id,
+                    type: 'PUT',
+                    success: function(ms) {
+                        console.log(ms);
+                    },
+                    data: $('#edit_mealshare_form').serialize()
+                });
+            });
+
+            $('#edit-modal').modal();
         }
 
         self.attend = function(data) {
