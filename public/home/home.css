@@ -19,6 +19,19 @@
 	background-color: #000000;
 }
 
+#host-box {
+	border: 2px solid white;
+	margin-top: 10px;
+	padding-top: 5px;
+	padding-bottom: 4px;
+	margin-bottom: 1px;
+	border-radius: 2px;
+}
+
+#host-box:hover {
+	background-color: rgba(0,0,0,0.35);
+}
+
 .ms-warning-label {
 	float: right;
 	padding: 10px;
