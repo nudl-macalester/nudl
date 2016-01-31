@@ -128,6 +128,7 @@ module.exports = function(app) {
                 res.status(500)
                     .send("delete failed");
             }
+            // todo: delete email
             res.status(200)
                 .send(msId);
         });

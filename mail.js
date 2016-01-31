@@ -23,8 +23,7 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-// Must change for production
-var url = "http://0.0.0.0:3000";
+var url = "http://nudl.co/";
 
 // client id:    307181339517-hhm4stv3hp4pjm2jp9u8octmk6ee7kno.apps.googleusercontent.com
 // client secret:   MLTgD8BnMyyEvMzh49pbr3QR

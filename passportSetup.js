@@ -3,7 +3,8 @@ var bcrypt = require('bcrypt-nodejs');
 var database = require('./database');
 var mail = require('./mail');
 
-var url = "http://0.0.0.0:3000";
+// var url = "http://0.0.0.0:3000"; //dev
+var url = "http://nudl.co/"; //prod
 
 module.exports.setup = function(passport) {
 // Passport setup
