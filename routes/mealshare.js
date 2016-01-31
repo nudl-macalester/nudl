@@ -11,6 +11,7 @@ module.exports = function(app) {
                     res.status(500)
                         .send("Error saving new mealshare");
                 }
+                mail.sendMealshareCreate(ms, req.user);
                 res.status(200)
                     .send(ms);
         });
@@ -35,6 +36,7 @@ module.exports = function(app) {
                     .send("something went wrong");
                 return;
             }
+            mail.sendMealshareAttend(req.mealshare, req.user);
             res.status(200)
                 .send(ms);
         });
