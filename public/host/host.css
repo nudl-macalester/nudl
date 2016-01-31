@@ -19,13 +19,13 @@
 	width: 100%;
 }
 
-/*#new_mealshare_form .timepicker {
-	width: 40%;
+#nudl_footer {
+	width: 100%;
+	margin: auto;
+	position: absolute;
+	bottom: 0;
+	text-align: center;
 }
-
-#new_mealshare_form .datepicker {
-	width: 60%;
-}*/
 
 #host-box {
 	border: 2px solid white;

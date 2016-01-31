@@ -24,6 +24,14 @@
 	background-color: rgba(0,0,0,0.35);
 }
 
+#nudl_footer {
+	width: 100%;
+	margin: auto;
+	/*position: /*absolute*/;*/
+	bottom: 0;
+	text-align: center;
+}
+
 /* ***************************************
 	ABOUT PICTURES
 *****************************************/
@@ -41,22 +49,6 @@
 }
 #dangel-picture:hover{
 	background: url('http://nudl.co/photos-members/Dangel2.JPG');
-	background-size: 300px 300px;
-}
-#alexk-picture{
-	background: url('http://nudl.co/photos-members/Klopp1.JPG');
-    background-size: 300px 300px;
-    background-repeat: no-repeat;
-    -o-transition:.5s;
-	-ms-transition:.5s;
-	-moz-transition:.5s;
-	-webkit-transition:.5s;
-	transition:.5s;
-	height: 300px;
-	width: 300px;
-}
-#alexk-picture:hover{
-	background: url('http://nudl.co/photos-members/Klopp2.JPG');
 	background-size: 300px 300px;
 }
 #caitlin-picture{

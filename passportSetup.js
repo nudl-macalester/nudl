@@ -23,10 +23,10 @@ module.exports.setup = function(passport) {
             function (req, username, password, done) {
                 var email = req.body.email;
 
-                // var macEmailPat = /.+@macalester.edu/g;
-                // if (!macEmailPat.test(email)) {
-                //     return done("Not Macalester email");
-                // }
+                var macEmailPat = /.+@macalester.edu/g;
+                if (!macEmailPat.test(email)) {
+                    return done("Not Macalester email");
+                }
 
                 database.User.create(username, password, email, function(err, user) {
                     if (err)

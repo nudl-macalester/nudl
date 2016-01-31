@@ -28,6 +28,14 @@
 	border-radius: 2px;
 }
 
+#nudl_footer {
+	width: 100%;
+	margin: auto;
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+}
+
 #host-box:hover {
 	background-color: rgba(0,0,0,0.35);
 }
