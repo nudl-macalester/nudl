@@ -198,7 +198,7 @@ generateFrontEndMealsharesForUser = function(mealshares, user) {
 
         fEMS.index = i;
 
-        // only the creator should see the full guest list
+        // creator and guest should see the full guest list
         if (mealshare.creator._id.toString() == user._id.toString()) {
         	fEMS.isCreator = true;
         	fEMS.isHost = true;
@@ -210,8 +210,12 @@ generateFrontEndMealsharesForUser = function(mealshares, user) {
         		fEMS.guests.push(guestName);
         	}
         }
-        else if (mealshare.userIsGuest(user) != -1) { // guests see nothing for now
+        else if (mealshare.userIsGuest(user) != -1) {
         	fEMS.isGuest = true;
+        	for (var j = 0; j < mealshare.guests.length; j++) {
+        		var guestName = mealshare.guests[j].name;
+        		fEMS.guests.push(guestName);
+        	}
         }
         else if (mealshare.userIsHost(user) != -1) { // hosts also see nothing for now
             fEMS.isHost = true;

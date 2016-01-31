@@ -79,7 +79,7 @@
 
     <div>
         <ul data-bind="foreach: mealshares">
-            <li data-bind="if: ((isCreator && $parent.displayCreated) || (isGuest && $parent.displayAttending) || $parent.displayAll)">
+            <li data-bind="if: $parent.displayThis(isGuest, isCreator)">
                 <div class="mealshare-container">
                     <b><span data-bind="text: name"></span></b>
                     <span style="float: right;" data-bind="text: dateFormat(time, 'ddd, mmm dd hh:MM TT')"></span>
