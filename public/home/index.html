@@ -134,17 +134,19 @@
             <form id="edit_mealshare_form">
                 <label for="name">Name:</label>
                 <input type="text" id="name-input" name="name"><br><br>
-                <label for="max_guests">Number of guests:</label>
+                <label id="max-guests-label" for="max_guests">Number of guests:</label>
                 <input type="number" id="capacity-input" name="max_guests" min="1">
-                <label for="date">Date:</label>
+                <label for="date">Date: (month/date)</label>
                 <input type="text" id="edit-date-input" class="datepicker" placeholder="Date" name="date"><br>
-                <label for="time">Time:</label>
+                <label for="time">Time: (PM time only, hours:minutes)</label>
                 <input type="text" id="edit-time-input" class="timepicker" placeholder="Time" name="time">
                 <label for="price">Price:</label>
                 <input type="number" id="price-input" placeholder="Price" min="2" name="price">
                 <br><br>
 
-                <textarea rows="4" id="description-input" name="description" form="new_mealshare_form" placeholder="Description -- Location, Dietary restrictions, Alergens etc."></textarea><br>
+                <textarea rows="4" id="description-input" name="description" form="edit_mealshare_form" placeholder="Description -- Location, Dietary restrictions, Alergens etc."></textarea><br>
+
+                <textarea rows="4" id="guests-message" name="guests_message" form="edit_mealshare_form" placeholder="Enter a message to your guests about these changes. Guests will be notified by email, provided there is a message here"></textarea>
             </form>
       </div>
       <div class="modal-footer">

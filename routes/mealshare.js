@@ -1,4 +1,5 @@
 var db = require('../database');
+var mail = require('../mail');
 
 module.exports = function(app) {
 
@@ -76,8 +77,46 @@ module.exports = function(app) {
     });
 
     app.put('/mealshare/edit/:mealshareId', isLoggedIn, function(req, res) {
-        res.status(200)
-            .send(req.mealshare.name);
+        var mealshare = req.mealshare;
+        mealshare.name = req.body.name;
+        mealshare.description = req.body.description;
+        mealshare.price = req.body.price;
+
+        var dateCheck = new Date(req.body.date + "/16 " + req.body.time);
+        if (dateCheck == "Invalid Date") {
+            res.status(400)
+                .send("Invalid date");
+            return;
+        }
+
+        if (dateCheck.getHours() > 12) {
+            dateCheck.setHours(dateCheck.getHours() + 12);
+        }
+        mealshare.time = dateCheck;
+
+        mealshare.max_guests = req.body.max_guests;
+        mealshare.spots_left = mealshare.max_guests - mealshare.guests.length;
+
+        if (mealshare.spots_left < 0) {
+            res.status(400)
+                .send("Not enough capacity for existing guests");
+            return;
+        }
+
+        mealshare.save(function(err) {
+            if (err) {
+                res.status(500)
+                    .send("Something went wrong");
+                return;
+            }
+
+            if (mealshare.guests.length > 0 && req.body.guests_message != "") {
+                mail.sendMealshareUpdate(mealshare, req.body.guests_message);
+            }
+
+            res.status(200)
+                .send(req.body.guests_message);
+        });
     });
 
     app.delete('/mealshare/delete/:mealshareId', isLoggedIn, function(req, res) {

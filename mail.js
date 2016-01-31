@@ -1,16 +1,36 @@
 var nodemailer = require('nodemailer');
 
+var generator = require('xoauth2').createXOAuth2Generator({
+    user: 'nudl.macalester@gmail.com',
+    clientId: '307181339517-hhm4stv3hp4pjm2jp9u8octmk6ee7kno.apps.googleusercontent.com',
+    clientSecret: 'MLTgD8BnMyyEvMzh49pbr3QR',
+    refreshToken: '1/lREMF2EKBKjDgXBBnWOczMbnQLiNCUeJWLA-GbVbm7I',
+    accessToken: 'ya29.egLm7WbRSKqqJtmqWm-rotqrxvbTv3O_0c7_jF3S2bhwGMTAjmCUH-A7h7vU8TcPE8GX' // optional
+});
+
+// listen for token updates
+// you probably want to store these to a db
+generator.on('token', function(token){
+    console.log('New token for %s: %s', token.user, token.accessToken);
+});
+
 // Create a "transporter" to actually send the mail
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'nudl.test@gmail.com',
-        pass: 'GroovyFood'
+
+        xoauth2: generator
     }
 });
 
 // Must change for production
 var url = "http://0.0.0.0:3000";
+
+// client id:    307181339517-hhm4stv3hp4pjm2jp9u8octmk6ee7kno.apps.googleusercontent.com
+// client secret:   MLTgD8BnMyyEvMzh49pbr3QR
+// refresh token:    1/lREMF2EKBKjDgXBBnWOczMbnQLiNCUeJWLA-GbVbm7I
+// access token:     ya29.egLm7WbRSKqqJtmqWm-rotqrxvbTv3O_0c7_jF3S2bhwGMTAjmCUH-A7h7vU8TcPE8GX
+
 
 
 sendEmail = function(obj) {
@@ -32,6 +52,20 @@ sendEmail = function(obj) {
         }
     });
 };
+
+module.exports.sendMealshareUpdate = function(mealshare, message) {
+    var guestsEmailsString = "";
+    for (var i = 0; i < mealshare.guests.length - 1; i++) {
+        guestsEmailsString += mealshare.guests[i].email + ",";
+    }
+
+    guestsEmailsString += mealshare.guests[mealshare.guests.length - 1].email;
+    sendEmail({
+        to: guestsEmailsString,
+        subject: "Mealshare Update",
+        body: 'Hi there! <br><br> The mealshare ' + mealshare.name +' has been updated! Here\'s a message from ' + mealshare.creator.name + ': <br><br>' + message + 'Cheers!'
+    });
+}
 
 module.exports.sendEmailVerification = function(user) {
     sendEmail({

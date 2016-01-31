@@ -28,6 +28,8 @@ $(function() {
         self.edit = function(data) {
             $('#name-input').val(data.name);
             $('#capacity-input').val(data.maxCapacity);
+            $('#capacity-input').attr("min", data.guests.length);
+            $('#max-guests-label').text("Number of guests: (Minimum current number of guests: " + data.guests.length + ")");
             $('#price-input').val(data.price);
             $('#description-input').val(data.description);
             $('#edit-date-input').val(dateFormat(data.time, 'mm/dd'));
@@ -38,7 +40,10 @@ $(function() {
                     url:'/mealshare/edit/' + data.id,
                     type: 'PUT',
                     success: function(ms) {
-                        console.log(ms);
+                        window.location.reload();
+                    },
+                    error: function(msg) {
+                        alert("Something's wrong, check the date/time formats and that there's room for all guests");
                     },
                     data: $('#edit_mealshare_form').serialize()
                 });
