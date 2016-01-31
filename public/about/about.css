@@ -1,0 +1,129 @@
+#mainNav {
+    border-color: rgba(255,255,255,.3);
+    background-color: #FF8500;
+}
+
+.navbar-default .navbar-header .navbar-brand {
+	color: #777;
+}
+
+#home-content {
+	margin-top: 70px;
+}
+
+/* ***************************************
+	ABOUT PICTURES
+*****************************************/
+#dangel-picture{
+	background: url('http://nudl.co/photos-members/Dangel1.JPG');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+	-o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+	height: 300px;
+	width: 300px;
+}
+#dangel-picture:hover{
+	background: url('http://nudl.co/photos-members/Dangel2.JPG');
+	background-size: 300px 300px;
+}
+#alexk-picture{
+	background: url('http://nudl.co/photos-members/Klopp1.JPG');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    -o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+	height: 300px;
+	width: 300px;
+}
+#alexk-picture:hover{
+	background: url('http://nudl.co/photos-members/Klopp2.JPG');
+	background-size: 300px 300px;
+}
+#caitlin-picture{
+	background: url('http://nudl.co/photos-members/Toner1.JPG');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    -o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+	height: 300px;
+	width: 300px;
+}
+#caitlin-picture:hover{
+	background: url('http://nudl.co/photos-members/Toner2.JPG');
+	background-size: 300px 300px;
+}
+#prad-picture{
+	background: url('http://nudl.co/photos-members/Prady1.JPG');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    -o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+	height: 300px;
+	width: 300px;
+}
+#prad-picture:hover{
+	background: url('http://nudl.co/photos-members/Prady2.JPG');
+	background-size: 300px 300px;
+}
+#emma-picture{
+	background: url('http://nudl.co/photos-members/Emma1.JPG');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    -o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+	height: 300px;
+	width: 300px;
+}
+#emma-picture:hover{
+	background: url('http://nudl.co/photos-members/Emma2.JPG');
+	background-size: 300px 300px;
+}
+#eivind-picture{
+	background: url('http://nudl.co/photos-members/Eivind1.JPG');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    -o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+	height: 300px;
+	width: 300px;
+}
+#eivind-picture:hover{
+	background: url('http://nudl.co/photos-members/Eivind2.JPG');
+	background-size: 300px 300px;
+}
+#alan-picture{
+	background: url('http://nudl.co/photos-members/Alan1.JPG');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    -o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+	height: 300px;
+	width: 300px;
+}
+#alan-picture:hover{
+	background: url('http://nudl.co/photos-members/Alan2.JPG');
+	background-size: 300px 300px;
+}
+
