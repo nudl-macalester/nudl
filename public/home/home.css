@@ -13,6 +13,14 @@
 
 #few-spots-left-div {
 	background-color: #FF0000;
+}
+
+#is-full-div {
+	background-color: #000000;
+}
+
+.ms-warning-label {
+	float: right;
 	padding: 10px;
 	padding-bottom: 7px;
 	border-radius: 3px;

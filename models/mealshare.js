@@ -50,6 +50,7 @@ mealshareSchema.methods.addGuest = function(user, cb) {
 		return;
 	} else if (self.spots_left == 0) {
 		cb("mealshare is full");
+		return;
 	}
 	self.guests.push(user);
 	self.spots_left--;
@@ -139,7 +140,8 @@ function frontEndMealshare(ms) {
     this.hosts = [];
     this.maxCapacity;
     this.spotsLeft;
-    this.fewSpotsLeft = ms.spots_left <= 3;
+    this.isFull = ms.spots_left == 0;
+    this.fewSpotsLeft = ms.spots_left <= 3 && ms.spots_left > 0;
     this.price = ms.price;
 
     this.index;
@@ -222,7 +224,7 @@ generateFrontEndMealsharesForUser = function(mealshares, user) {
 
 // we don't want to give all users access to all fields, and we don't want userids in the lists, so we filter a little for the specific user
 mealshareSchema.statics.getFrontEndMealsharesForUser = function(user, cb) {
-	Mealshare.find({time: { $gt: Date.now() }, spots_left: { $gt: 0 } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
+	Mealshare.find({time: { $gt: Date.now() } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
 		if (err) {
 			return cb(err);
 		}

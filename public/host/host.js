@@ -2,6 +2,19 @@ $(function() {
 	function AppViewModel() {
         var self = this;
         self.mealshares = ko.observableArray(mealshares);
+
+        self.createMeal = function() {
+
+
+        	$.ajax({
+	            url:'/mealshare/new',
+	            type: 'POST',
+	            success: function(ms) {
+	            	window.location.reload();
+	            },
+	            data: $('#new_mealshare_form').serialize()
+        	});
+        }
     }
     ko.applyBindings(new AppViewModel());
 
@@ -20,16 +33,17 @@ $(function() {
 		min: [12, 00]
 	});
 
-	$('#new_mealshare_form').submit(function(e) {
-		e.preventDefault();
-		console.log("asdf");
-        $.ajax({
-            url:'/mealshare/new',
-            type: 'POST',
-            success: function(ms) {
-            	console.log(ms);
-            },
-            data: $('#new_mealshare_form').serialize()
-        });
-	});
+	// $('#new_mealshare_form').submit(function(e) {
+	// 	e.preventDefault();
+	// 	console.log("asdf");
+ //        $.ajax({
+ //            url:'/mealshare/new',
+ //            type: 'POST',
+ //            success: function(ms) {
+ //            	mealshares.push(ms);
+ //            	console.log(ms);
+ //            },
+ //            data: $('#new_mealshare_form').serialize()
+ //        });
+	// });
 });

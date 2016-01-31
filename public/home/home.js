@@ -3,7 +3,7 @@ $(function() {
         var self = this;
         self.mealshares = ko.observableArray(mealshares);
 
-        self.displayOthers = ko.observable(true);
+        self.displayAll = ko.observable(true);
         self.displayCreated = ko.observable(false);
         self.displayHosting = ko.observable(false);
         self.displayAttending = ko.observable(false);
@@ -20,11 +20,14 @@ $(function() {
         }
 
         self.attend = function(data) {
+
             $.ajax({
                 url: '/mealshare/attend/' + data.id,
                 type: 'PUT',
                 success: function(ms) {
                     data.isGuest = true;
+                    self.mealshares.splice(data.index, 1);
+                    self.mealshares.splice(ms.index, 0, ms);
                 },
                 data: null,
                 contentType: "application/json; charset=utf-8"
@@ -37,7 +40,8 @@ $(function() {
                 url: '/mealshare/unattend/' + data.id,
                 type: 'PUT',
                 success: function(ms) {
-                    data.isGuest = false;
+                    self.mealshares.splice(data.index, 1);
+                    self.mealshares.splice(ms.index, 0, ms);
                 },
                 data: null,
                 contentType: "application/json; charset=utf-8"

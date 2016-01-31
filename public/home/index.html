@@ -70,14 +70,14 @@
 <div id="center-div" class="col-md-8">
 
 <div id="mealshare-list-container">
-    <label><input type="checkbox" data-bind="checked: displayOthers" /> Display Other Mealshares</label>
-    <label><input type="checkbox" data-bind="checked: displayCreated" /> Display My Mealshares</label>
-    <label><input type="checkbox" data-bind="checked: displayHosting" /> Display Mealshares I'm Co-Hosting</label>
-    <label><input type="checkbox" data-bind="checked: displayAttending"/> Display Mealshares I'm Attending</label>
+    <label><input type="checkbox" data-bind="checked: displayAll" /> All Mealshares</label>
+    <label><input type="checkbox" data-bind="checked: displayCreated" /> My Mealshares</label>
+    <!-- <label><input type="checkbox" data-bind="checked: displayHosting" /> Display Mealshares I'm Co-Hosting</label> -->
+    <label><input type="checkbox" data-bind="checked: displayAttending"/> Mealshares I'm Attending</label>
 
     <div>
         <ul data-bind="foreach: mealshares">
-            <li data-bind="if: ((isCreator && $parent.displayCreated) || (isHost && $parent.displayHosting) || (isGuest && $parent.displayAttending) || (!isGuest && $parent.displayOthers))">
+            <li data-bind="if: ((isCreator && $parent.displayCreated) || (isGuest && $parent.displayAttending) || $parent.displayAll)">
                 <div class="mealshare-container">
                     <b><span data-bind="text: name"></span></b>
                     <span style="float: right;" data-bind="text: dateFormat(time, 'ddd, mmm dd hh:MM TT')"></span>
@@ -87,13 +87,16 @@
                     <div class="description-container">
                         <p data-bind="text: description"></p>
                     </div>
-                    <a class="btn btn-mealshare" data-bind="visible: (!isGuest && !isHost && !isCreator), click: $parent.attend">Attend</a>
+                    <a class="btn btn-mealshare" data-bind="visible: (!isGuest && !isCreator && !isFull), click: $parent.attend">Attend</a>
                     <a class="btn btn-mealshare" data-bind="visible: isGuest, click: $parent.unattend">Unattend</a>
                     <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.delete">Delete</a>
                     <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.edit">Edit</a>
-                    <a class="btn btn-mealshare" data-bind="visible: (isHost && !isCreator), click: $parent.unhost">Unhost</a>
-                    <div id="few-spots-left-div" style="float: right;" data-bind="visible: fewSpotsLeft">
-                        Almost empty!
+                    <!-- <a class="btn btn-mealshare" data-bind="visible: (isHost && !isCreator), click: $parent.unhost">Unhost</a> -->
+                    <div id="is-full-div" class="ms-warning-label" data-bind="visible: isFull">
+                        Full
+                    </div>
+                    <div id="few-spots-left-div" class="ms-warning-label" data-bind="visible: fewSpotsLeft">
+                        Almost full!
                     </div>
                 </div
             </li>
