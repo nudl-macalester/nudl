@@ -84,7 +84,7 @@ module.exports = function(app) {
         mealshare.description = req.body.description;
         mealshare.price = req.body.price;
 
-        var dateCheck = new Date(req.body.date + "/16 " + req.body.time);
+        var dateCheck = new Date(req.body.date + "/16 " + req.body.time + " GMT-0600");
         if (dateCheck == "Invalid Date") {
             res.status(400)
                 .send("Invalid date");
