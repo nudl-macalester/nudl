@@ -82,7 +82,7 @@
             <li data-bind="if: $parent.displayThis(isGuest, isCreator)">
                 <div class="mealshare-container">
                     <b><span data-bind="text: name"></span></b>
-                    <span style="float: right;" data-bind="text: dateFormat(time, 'ddd, mmm dd hh:MM TT')"></span>
+                    <span style="float: right;" data-bind="text: dateFormat(time, 'ddd, mmm dd h:MM TT')"></span>
                     <br>
                     <span data-bind="text: 'by: ' + creator"></span>
                     <span style="float: right;" data-bind="text: '$' + price"></span>

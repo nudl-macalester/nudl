@@ -33,7 +33,7 @@ $(function() {
             $('#price-input').val(data.price);
             $('#description-input').val(data.description);
             $('#edit-date-input').val(dateFormat(data.time, 'mm/dd'));
-            $('#edit-time-input').val(dateFormat(data.time, 'HH:MM'));
+            $('#edit-time-input').val(dateFormat(data.time, 'h:MM'));
 
             $('#edit-save-button').click(function() {
                 $.ajax({
