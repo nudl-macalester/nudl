@@ -22,7 +22,7 @@
 #nudl_footer {
 	width: 100%;
 	margin: auto;
-	position: absolute;
+	position: relative;
 	bottom: 0;
 	text-align: center;
 }
@@ -47,6 +47,12 @@
 	color: #FFFFFF;
 	background-color: #FF8500;
 	border-color: rgba(255,255,255,.3);
+}
+
+@media screen and (min-width: 990px) {
+    #nudl_footer {
+        position: absolute;
+    }
 }
 
 ul {
