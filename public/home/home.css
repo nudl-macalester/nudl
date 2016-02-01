@@ -31,7 +31,7 @@
 #nudl_footer {
 	width: 100%;
 	margin: auto;
-	position: absolute;
+	position: relative;
 	bottom: 0;
 	text-align: center;
 }
