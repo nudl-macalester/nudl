@@ -18,12 +18,11 @@ generator.on('token', function(token){
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-
         xoauth2: generator
     }
 });
 
-var url = "http://nudl.co/";
+var url = "http://nudl.co";
 
 // client id:    307181339517-hhm4stv3hp4pjm2jp9u8octmk6ee7kno.apps.googleusercontent.com
 // client secret:   MLTgD8BnMyyEvMzh49pbr3QR
