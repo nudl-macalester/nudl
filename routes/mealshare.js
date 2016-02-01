@@ -91,7 +91,7 @@ module.exports = function(app) {
             return;
         }
 
-        if (dateCheck.getHours() > 12) {
+        if (dateCheck.getHours() <= 12) {
             dateCheck.setHours(dateCheck.getHours() + 12);
         }
         mealshare.time = dateCheck;
