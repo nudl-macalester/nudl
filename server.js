@@ -107,6 +107,6 @@ function isLoggedIn(req, res, next) {
 // Middleware for authentication:
 app.use(express.static(path.join(process.cwd(), '/public')));
 
-server.listen(80, function() {
-    console.log("Listening on port 80");
+server.listen(8080, function() {
+    console.log("Listening on port 8080");
 });
