@@ -71,10 +71,13 @@ module.exports.sendMealshareAttend = function(mealshare, user) {
         guestsNames += mealshare.guests[i].name + "<br>";
     }
 
+    mealshare.time.setHours(mealshare.time.getHours() - 1); // quickfix for Macalester time, server is in New York (EST) currently
+    var dateTimeString = dateFormat(mealshare.time, 'dddd, h:MM TT');
+
     sendEmail({
         to: user.email,
         subject: "Attending Mealshare: " + mealshare.name,
-        body: 'Hi ' + user.name + '! <br><br>  You have reserved a spot at the mealshare ' + mealshare.name + '<br><br>Other guests include:<br><br>' + guestsNames + '<br><br>Time: ' + dateFormat(mealshare.time, 'dddd, h:MM TT') + ' PM<br><br> If for some reason you cannot attend, please find a friend to replace you and \"unattend\" your RSVP on nudl.co. We will hold you accountable for your spot at the table if you are RSVP’d for the event 6 hours in advance of the start time. <br><br>Bon Appétit, <br>The NÜDL Team<br><br>Eat together. Eat smarter.<br>nudl.co'
+        body: 'Hi ' + user.name + '! <br><br>  You have reserved a spot at the mealshare ' + mealshare.name + '<br><br>Other guests include:<br><br>' + guestsNames + '<br><br>Time: ' + dateTimeString + ' <br><br> If for some reason you cannot attend, please find a friend to replace you and \"unattend\" your RSVP on nudl.co. We will hold you accountable for your spot at the table if you are RSVP’d for the event 6 hours in advance of the start time. <br><br>Bon Appétit, <br>The NÜDL Team<br><br>Eat together. Eat smarter.<br>nudl.co'
     });
 }
 
