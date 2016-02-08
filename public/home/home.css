@@ -69,6 +69,7 @@
 	color: #FFFFFF;
 	background-color: #FF8500;
 	border-color: rgba(255,255,255,.3);
+	overflow: auto;
 }
 
 .description-container {
