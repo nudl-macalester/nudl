@@ -104,6 +104,16 @@ app.get('/admin', isLoggedIn, isAdmin, function(req, res) {
     });
 });
 
+app.get('/admin/mealshare/get/:mealshareId', isLoggedIn, isAdmin, function(req, res) {
+    var mealshareId = req.param("mealshareId");
+    db.Mealshare.findById(mealshareId).populate('creator hosts guests').exec(function(err, mealshare) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(mealshare);
+    });
+});
+
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated() && req.user.verified) {

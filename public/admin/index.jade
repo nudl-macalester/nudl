@@ -2,6 +2,9 @@ doctype html
 html(lang="en")
 	head
 		title= 'Admin Tools'
+		link(href='/admin/admin.css' rel='stylesheet')
+		script(src='/../js/jquery.js')
+		script(src='/admin/admin.js')
 	body
 		h1 Admin Tools
 		p Welcome, #{adminUser}
@@ -10,13 +13,18 @@ html(lang="en")
 		h2 Mealshares
 		ul
 			each mealshare in mealshares
-				li #{mealshare.name}
+				li 
+					a(href="#{mealshare._id}") #{mealshare.name}
 					div
-						label time: #{mealshare.time}
+						label by: #{mealshare.creator.name}
 						br
-						label number of spots: #{mealshare.max_guests}
-						br
-						label number of signed up guests: #{mealshare.max_guests - mealshare.spots_left}
+						label on: #{mealshare.time}
+		div#mealshare-container
+			h2 Selected Mealshare
+			p#ms-name
+			p#ms-creator
+			ul#ms-guests
+
 		h2 Users
 		ol
 			each user in users
