@@ -11,6 +11,12 @@ html(lang="en")
 		ul
 			each mealshare in mealshares
 				li #{mealshare.name}
+					div
+						label time: #{mealshare.time}
+						br
+						label number of spots: #{mealshare.max_guests}
+						br
+						label number of signed up guests: #{mealshare.max_guests - mealshare.spots_left}
 		h2 Users
 		ol
 			each user in users

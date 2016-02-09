@@ -261,11 +261,12 @@ mealshareSchema.statics.getUpcomingMealshares = function(user, cb) {
 }
 
 mealshareSchema.statics.getAllMealshares = function(cb) {
-	Mealshare.find({}, function(err, mealshares) {
+	Mealshare.find({}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
 		if (err) {
 			return cb(err);
 		}
-		cb(null, mealshares);
+
+        cb(null, mealshares);
 	});
 }
 
