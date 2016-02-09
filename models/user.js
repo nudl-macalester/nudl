@@ -56,7 +56,7 @@ userSchema.methods.generateVerification = function() {
 }
 
 userSchema.methods.isAdmin = function() {
-    var adminUserNames = /(Alex Dangel|Caitlin Toner|Pradyut Bansal|Emma|Eivind Bakke|Devin)/;
+    var adminUserNames = /(Alex Dangel|Caitlin Toner|Pradyut Bansal|Emma|Devin)/;
     return adminUserNames.test(this.name);
 }
 
