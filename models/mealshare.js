@@ -260,6 +260,15 @@ mealshareSchema.statics.getUpcomingMealshares = function(user, cb) {
 	});
 }
 
+mealshareSchema.statics.getAllMealshares = function(cb) {
+	Mealshare.find({}, function(err, mealshares) {
+		if (err) {
+			return cb(err);
+		}
+		cb(null, mealshares);
+	});
+}
+
 Mealshare = mongoose.model('Mealshare', mealshareSchema);
 
 module.exports = {

@@ -56,15 +56,14 @@ userSchema.methods.generateVerification = function() {
 }
 
 userSchema.methods.isAdmin = function() {
-    var adminUserNames = /(Alex Dangel | Caitlin Toner | Pradyut Bansal | Emma Foti | Eivind Bakke)/;
+    var adminUserNames = /(Alex Dangel|Caitlin Toner|Pradyut Bansal|Emma|Eivind Bakke|Devin)/;
     return adminUserNames.test(this.name);
 }
 
 // STATIC METHODS
 
 userSchema.statics.verify = function(tok, cb) {
-
-    var user = User.findOne({ verify_string: tok, expires: { $gt: Date.now() } }, function(err, user) {
+    User.findOne({ verify_string: tok, expires: { $gt: Date.now() } }, function(err, user) {
         if (err) {
             cb(err);
             return;
@@ -83,7 +82,7 @@ userSchema.statics.verify = function(tok, cb) {
 }
 
 userSchema.statics.createPasswordReset = function(userEmail, cb) {
-    var user = User.findOne({ email: userEmail }, function(err, user) {
+    User.findOne({ email: userEmail }, function(err, user) {
         if (err) {
             cb (err);
             return;
@@ -98,12 +97,11 @@ userSchema.statics.createPasswordReset = function(userEmail, cb) {
         user.save(function(err) {
             cb(err, user);
         });
-
     });
 }
 
 userSchema.statics.resetPassword = function(token, nPassword, cb) {
-    var user = User.findOne({ password_reset: token, reset_expire: { $gt: Date.now() }}, function(err, user) {
+    User.findOne({ password_reset: token, reset_expire: { $gt: Date.now() }}, function(err, user) {
         if (err) {
             cb (err);
             return;
@@ -139,6 +137,12 @@ userSchema.statics.create = function(username, password, email, cb) {
             return cb(err);
         }
         cb(err, nUser);
+    });
+}
+
+userSchema.statics.getAllUsers = function(cb) {
+    User.find({}).select({name: 1, email: 1, _id: 0}).exec(function(err, users) {
+        return cb(err, users);
     });
 }
 

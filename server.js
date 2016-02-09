@@ -13,12 +13,14 @@ var mail = require('./mail');
 var auth = require('./passportSetup');
 var http = require('http');
 var crypto = require('crypto');
+var jade = require('jade');
 
 // Express setup
 var app = express();
 var server = http.createServer(app);
 
 app.use(logger('dev'));
+app.set('view engine', 'jade');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
@@ -90,17 +92,36 @@ app.get('/host/', isLoggedIn, function(req, res) {
     });
 });
 
+app.get('/admin', isLoggedIn, isAdmin, function(req, res) {
+    var adminDocPath = path.join(process.cwd(), 'public/admin/index');
+
+    db.Mealshare.getAllMealshares(function(err, mealshares) {
+
+        db.User.getAllUsers(function(err, users) {
+
+            res.render(adminDocPath, {adminUser: req.user.name, mealshares: mealshares, users: users});
+        });
+    });
+});
+
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated() && req.user.verified) {
         return next();
     }
 
-    if(req.user && !req.user.verified) {
+    if (req.user && !req.user.verified) {
         res.end('Please verify your account.');
         return;
     }
 
+    res.redirect('/');
+}
+
+function isAdmin(req, res, next) {
+    if (req.user.isAdmin()) {
+        return next();
+    }
     res.redirect('/');
 }
 

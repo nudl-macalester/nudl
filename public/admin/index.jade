@@ -1,0 +1,22 @@
+doctype html
+html(lang="en")
+	head
+		title= 'Admin Tools'
+	body
+		h1 Admin Tools
+		p Welcome, #{adminUser}
+		br
+		p Here are the admin tools for nudl. More content will be added, for now we'll just show you everything we have
+		h2 Mealshares
+		ul
+			each mealshare in mealshares
+				li #{mealshare.name}
+		h2 Users
+		ol
+			each user in users
+				li
+					div
+						label name: #{user.name}
+						br
+						label email: #{user.email}
+
