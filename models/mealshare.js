@@ -143,6 +143,7 @@ function frontEndMealshare(ms) {
     this.isFull = ms.spots_left == 0;
     this.fewSpotsLeft = ms.spots_left <= 3 && ms.spots_left > 0;
     this.price = ms.price;
+    this.happeningNow = ms.time <= Date.now();
 
     this.index;
 
@@ -166,8 +167,9 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
     // nMS.guests = req.body.guests;
 
     if (dateTime < new Date()) {
-    	cb("cannot create a mealshare before current time");
+    	return cb("cannot create a mealshare before current time");
     }
+    
     nMS.save(function(err) {
         if (err) {
         	cb(err);
@@ -227,8 +229,11 @@ generateFrontEndMealsharesForUser = function(mealshares, user) {
 }
 
 // we don't want to give all users access to all fields, and we don't want userids in the lists, so we filter a little for the specific user
+// gets mealshares that are upcoming and on-going (considered within an hour)
 mealshareSchema.statics.getFrontEndMealsharesForUser = function(user, cb) {
-	Mealshare.find({time: { $gt: Date.now() } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
+	var oneHourAgo = new Date();
+	oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+	Mealshare.find({time: { $gt: oneHourAgo } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
 		if (err) {
 			return cb(err);
 		}

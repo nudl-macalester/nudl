@@ -8,8 +8,9 @@ module.exports = function(app) {
         db.Mealshare.create(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(req.body.date + " " + req.body.time + " GMT-0600"), req.body.price,
             function(err, ms) {
                 if (err) {
-                    res.status(500)
-                        .send("Error saving new mealshare");
+                    console.log(err);
+                    return res.status(500)
+                            .send("Error saving new mealshare");
                 }
                 mail.sendMealshareCreate(ms, req.user);
                 res.status(200)

@@ -98,16 +98,21 @@
                     <div class="description-container">
                         <p data-bind="text: description"></p>
                     </div>
-                    <a class="btn btn-mealshare" data-bind="visible: (!isGuest && !isCreator && !isFull), click: $parent.attend">Attend</a>
-                    <a class="btn btn-mealshare" data-bind="visible: isGuest, click: $parent.unattend">Unattend</a>
-                    <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.delete">Delete</a>
-                    <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.edit">Edit</a>
-                    <!-- <a class="btn btn-mealshare" data-bind="visible: (isHost && !isCreator), click: $parent.unhost">Unhost</a> -->
-                    <div id="is-full-div" class="ms-warning-label" data-bind="visible: isFull">
-                        Full
+                    <div data-bind="visible: !happeningNow">
+                        <a class="btn btn-mealshare" data-bind="visible: (!isGuest && !isCreator && !isFull), click: $parent.attend">Attend</a>
+                        <a class="btn btn-mealshare" data-bind="visible: isGuest, click: $parent.unattend">Unattend</a>
+                        <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.delete">Delete</a>
+                        <a class="btn btn-mealshare" data-bind="visible: isCreator, click: $parent.edit">Edit</a>
+                        <!-- <a class="btn btn-mealshare" data-bind="visible: (isHost && !isCreator), click: $parent.unhost">Unhost</a> -->
+                        <div id="is-full-div" class="ms-warning-label" data-bind="visible: isFull">
+                            Full
+                        </div>
+                        <div id="few-spots-left-div" class="ms-warning-label" data-bind="visible: fewSpotsLeft">
+                            Almost full!
+                        </div>
                     </div>
-                    <div id="few-spots-left-div" class="ms-warning-label" data-bind="visible: fewSpotsLeft">
-                        Almost full!
+                    <div id="happening-div" class="ms-warning-label" data-bind="visible: happeningNow">
+                        Happening!
                     </div>
                 </div
             </li>
