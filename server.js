@@ -98,8 +98,36 @@ app.get('/admin', isLoggedIn, isAdmin, function(req, res) {
     db.Mealshare.getAllMealshares(function(err, mealshares) {
 
         db.User.getAllUsers(function(err, users) {
+            var nNextWeekMealshares = 0;
+            var nPastWeekMealshares = 0;
+            var nPastWeekGuests = 0;
+            
+            var weekAgo = new Date();
+            var currentDate = weekAgo.getDate();
+            weekAgo.setDate(currentDate - 7);
+            var weekFromToday = new Date();
+            weekFromToday.setDate(currentDate + 7);
+            var today = Date.now();
 
-            res.render(adminDocPath, {adminUser: req.user.name, mealshares: mealshares, users: users});
+            for (var i = 0; i < mealshares.length; i++) {
+                var mealshare = mealshares[i];
+                if (mealshare.time >= weekAgo && mealshare.time <= today) {
+                    nPastWeekMealshares++;
+                    nPastWeekGuests += mealshare.guests.length;
+                } else if (mealshare.time >= today && mealshare.time <= weekFromToday) {
+                    nNextWeekMealshares++;
+                }
+            }
+            // console.log(nNextWeekMealshares);
+
+            res.render(adminDocPath, {
+                adminUser: req.user.name,
+                mealshares: mealshares,
+                users: users,
+                nextWeekMSs: nNextWeekMealshares,
+                pastWeekMSs: nPastWeekMealshares,
+                pastWeekGuests: nPastWeekGuests
+            });
         });
     });
 });
@@ -109,6 +137,7 @@ app.get('/admin/mealshare/get/:mealshareId', isLoggedIn, isAdmin, function(req, 
     db.Mealshare.findById(mealshareId).populate('creator hosts guests').exec(function(err, mealshare) {
         if (err) {
             console.log(err);
+            return res.status(500);
         }
         res.send(mealshare);
     });

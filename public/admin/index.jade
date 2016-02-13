@@ -10,6 +10,34 @@ html(lang="en")
 		p Welcome, #{adminUser}
 		br
 		p Here are the admin tools for nudl. More content will be added, for now we'll just show you everything we have
+
+		h2 Summary
+		table
+			tr
+				td Users
+				td= users.length
+			tr
+				td Mealshares
+				td= mealshares.length
+			tr
+				td Guests past week
+				td= pastWeekGuests
+			tr
+				td Mealshares past week
+				td= pastWeekMSs
+			tr
+				td Mealshares upcoming week
+				td= nextWeekMSs
+
+		div#mealshare-container
+			h2 Selected Mealshare
+			p#ms-name
+			p#ms-creator
+			p#ms-spots-left
+			p#ms-capacity
+			p#ms-price
+			ul#ms-guests
+
 		h2 Mealshares
 		ul
 			each mealshare in mealshares
@@ -19,11 +47,8 @@ html(lang="en")
 						label by: #{mealshare.creator.name}
 						br
 						label on: #{mealshare.time}
-		div#mealshare-container
-			h2 Selected Mealshare
-			p#ms-name
-			p#ms-creator
-			ul#ms-guests
+						br
+						label #{mealshare.spots_left} / #{mealshare.max_guests}
 
 		h2 Users
 		ol

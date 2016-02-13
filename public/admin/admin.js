@@ -9,6 +9,9 @@ $(function() {
             	console.log(ms);
             	$('#ms-name').text(ms.name);
             	$('#ms-creator').text(ms.creator.name);
+                $('#ms-spots-left').text("empty spots: " + ms.spots_left);
+                $('#ms-capacity').text("capacity: " + ms.max_guests);
+                $('#ms-price').text("$ " + ms.price);
             	if (ms.guests.length > 0) {
             		populatePeopleList($('#ms-guests'), ms.guests);
             	} else {
