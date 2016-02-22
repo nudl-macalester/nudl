@@ -1,6 +1,7 @@
 var Mealshare = require('../models/mealshare');
 var User = require('../models/user');
-var mailCenter = require('../mail');
+var Emailer = require('../mail');
+var EmailScheduler = require('../mailScheduler');
 
 var exports = module.exports = {};
 
@@ -18,15 +19,17 @@ exports.createMealshare = function(user, name, description, maxCap, dateTime, pr
     	user.created_mealshares.push(mealshare);
     	user.save();
 
-    	var fEMS = new frontEndMealshare(mealshare);
-    	mailCenter.sendMealshareCreate(mealshare, user);
+    	var fEMS = new FrontEndMealshare(mealshare);
+    	Emailer.sendMealshareCreate(mealshare, user);
+
+        EmailScheduler.scheduleGuestReminder(mealshare);
 
     	cb(null, fEMS);
     });
 }
 
 exports.getMealshare = function(mealshareId, cb) {
-    Mealshare.findById(mealshareId).populate('creator hosts guests').exec(function(err, mealshare) {
+    Mealshare.getMealshare(mealshareId, function(err, mealshare) {
     	if (err) {
     		console.log(err);
     		return cb(err);
@@ -64,10 +67,10 @@ exports.updateMealshare = function(user, mealshare, name, description, maxCap, d
 			console.log(err);
 			return cb(err);
 		}
-		if (ms.guests.length > 0 && message != "") {
-			mailCenter.sendMealshareUpdate(ms, message);
+		if (ms.guests.length > 0 && message !== "") {
+			Emailer.sendMealshareUpdate(ms, message);
 		}
-		var fEMS = new frontEndMealshare(ms);
+		var fEMS = new FrontEndMealshare(ms);
 		cb(null, fEMS);
 	});
 }
@@ -78,9 +81,9 @@ exports.addGuestToMealshare = function(mealshare, user, cb) {
 			console.log(err);
 			return cb(err);
 		}
-		var fEMS = new frontEndMealshare(ms);
+		var fEMS = new FrontEndMealshare(ms);
 		fEMS.isGuest = true;
-		mailCenter.sendMealshareAttend(mealshare, user);
+		Emailer.sendMealshareAttend(mealshare, user);
 
 		cb(null, fEMS);
 	});
@@ -92,7 +95,7 @@ exports.removeGuestFromMealshare = function(mealshare, user, cb) {
 			console.log(err);
 			return cb(err);
 		}
-		var fEMS = new frontEndMealshare(ms);
+		var fEMS = new FrontEndMealshare(ms);
 		cb(null, fEMS);
 	});
 }
@@ -103,7 +106,7 @@ exports.addHostToMealshare = function(mealshare, user, cb) {
 			console.log(err);
 			return cb(err);
 		}
-		var fEMS = new frontEndMealshare(ms);
+		var fEMS = new FrontEndMealshare(ms);
 		fEMS.isHost = true;
 		cb(null, fEMS); 
 	});
@@ -115,7 +118,7 @@ exports.removeHostFromMealshare = function(mealshare, user, cb) {
 			console.log(err);
 			return cb(err);
 		}
-		var fEMS = new frontEndMealshare(ms);
+		var fEMS = new FrontEndMealshare(ms);
 		cb(null, fEMS);
 	});
 }
@@ -149,6 +152,9 @@ exports.deleteMealshare = function(mealshare, user, cb) {
 				console.log(err);
 				return cb(err);
 			}
+
+            EmailScheduler.deleteScheduledGuestReminder(mealshare);
+
 			// todo: email guests
 			cb(null, mealshare._id);
 		});
@@ -158,9 +164,9 @@ exports.deleteMealshare = function(mealshare, user, cb) {
 generateFrontEndMealsharesForUser = function(mealshares, user) {
 	var frontEndMealshares = [];
 
-	for (var i = 0; i < mealshares.length; i++) {
+	for (var i = 0; i < mealshares.length; i++) { // use mapping
         var mealshare = mealshares[i];
-        var fEMS = new frontEndMealshare(mealshare);
+        var fEMS = new FrontEndMealshare(mealshare);
 
         // public stuff
         for (var j = 0; j < mealshare.hosts.length; j++) {
@@ -200,7 +206,7 @@ generateFrontEndMealsharesForUser = function(mealshares, user) {
 
 // Frontend Mealshare object for user visibility
 
-function frontEndMealshare(ms) {
+function FrontEndMealshare(ms) {
 	this.id = ms._id;
     this.name = ms.name;
     this.description = ms.description;
@@ -222,3 +228,15 @@ function frontEndMealshare(ms) {
     this.isHost = false;
     this.isGuest = false;
 }
+
+
+// we have to set up reminders when the server restarts, since the scheduled jobs get deleted 
+
+(function() {
+    Mealshare.getUpcoming(function(err, mealshares) {
+        mealshares.forEach(function(mealshare) {
+            EmailScheduler.scheduleGuestReminder(mealshare);
+        });
+    });
+})();
+

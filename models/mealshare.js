@@ -12,7 +12,9 @@ var mealshareSchema = new Schema({
     guests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     time: Date,
     max_guests: Number,
-    spots_left: Number
+    spots_left: Number,
+
+    //scheduled job names -- emails
 });
 
 // INSTANCE METHODS
@@ -136,26 +138,9 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
     });
 }
 
-mealshareSchema.statics.getFrontEndMealsharesForUser = function(user, cb) {
-
-	Mealshare.find({time: { $gt: oneHourAgo } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
-		if (err) {
-			return cb(err);
-		}
-		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
-
-        cb(null, frontEndMealshares);
-
-	});
-}
-
 mealshareSchema.statics.getMealsharesCreatedByUser = function(user, cb) {
 	Mealshare.find({ creator: user }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
-		if (err) {
-			return cb(err);
-		}
-		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
-		cb(null, frontEndMealshares);
+		return cb(err, mealshares);
 	});
 }
 
@@ -170,11 +155,13 @@ mealshareSchema.statics.getUpcoming = function(cb) {
 
 mealshareSchema.statics.getAllMealshares = function(cb) {
 	Mealshare.find({}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
-		if (err) {
-			return cb(err);
-		}
+        return cb(err, mealshares);
+	});
+}
 
-        cb(null, mealshares);
+mealshareSchema.statics.getMealshare = function(id, cb) {
+    Mealshare.findById(id).populate('creator hosts guests').exec(function(err, mealshare) {
+		return cb(err, mealshare);
 	});
 }
 
