@@ -60,6 +60,31 @@ userSchema.methods.isAdmin = function() {
     return adminUserNames.test(this.name);
 }
 
+userSchema.methods.createdMealshareIndex = function(mealshare) {
+    var mealshareId = mealshare._id.toString();
+    for (var i = 0; i < this.created_mealshares.length; i++) {
+        var ms = this.created_mealshares[i];
+        if (ms._id && ms._id.toString() == mealshareId) {
+            return i;
+        } else if (ms.toString() == mealshareId) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+userSchema.methods.removeCreatedMealshare = function(mealshare, cb) {
+    var self = this;
+    var msIndex = self.createdMealshareIndex(mealshare);
+    if (msIndex == -1) {
+        return cb("user is not creator");
+    }
+    self.created_mealshares.splice(msIndex, 1);
+    self.save(function(err) {
+        cb(err, mealshare);
+    });
+}
+
 // STATIC METHODS
 
 userSchema.statics.verify = function(tok, cb) {
@@ -148,6 +173,4 @@ userSchema.statics.getAllUsers = function(cb) {
 
 User = mongoose.model('User', userSchema);
 
-module.exports = {
-    User: User
-};
+module.exports = User;

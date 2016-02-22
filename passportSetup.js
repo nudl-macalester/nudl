@@ -1,6 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
-var database = require('./database');
+var User = require('./models/user')
 var mail = require('./mail');
 
 // var url = "http://0.0.0.0:3000"; //dev
@@ -14,7 +14,7 @@ module.exports.setup = function(passport) {
     });
 
     passport.deserializeUser(function(id, done) {
-        database.User.findById(id, function(err, user) {
+        User.findById(id, function(err, user) {
             done(err, user);
         });
     });
@@ -29,7 +29,7 @@ module.exports.setup = function(passport) {
                     return done("Not Macalester email");
                 }
 
-                database.User.create(username, password, email, function(err, user) {
+                User.create(username, password, email, function(err, user) {
                     if (err)
                         return done(err);
 
@@ -44,7 +44,7 @@ module.exports.setup = function(passport) {
     passport.use('local-login', new LocalStrategy({ usernameField: 'email', passwordField: 'password' },
         
             function(username, password, done) {
-                database.User.findOne({ email: username }, function (err, user) {
+                User.findOne({ email: username }, function (err, user) {
                     if (err) return done(err);
                     if (!user) return done(null, false, {message: 'email not found'});
 

@@ -12,12 +12,18 @@ var mealshareSchema = new Schema({
     guests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     time: Date,
     max_guests: Number,
-    spots_left: Number
+    spots_left: Number,
+
+    //scheduled job names -- emails
 });
 
 // INSTANCE METHODS
 
-mealshareSchema.methods.userIsGuest = function (user) {
+mealshareSchema.methods.userIsCreator = function(user) {
+	return this.creator._id.toString() == user._id.toString();
+}
+
+mealshareSchema.methods.userIsGuest = function(user) {
 	var userId = user._id.toString();
 	for (var i = 0; i < this.guests.length; i++) {
 		var guest = this.guests[i];
@@ -30,7 +36,7 @@ mealshareSchema.methods.userIsGuest = function (user) {
 	return -1;
 }
 
-mealshareSchema.methods.userIsHost = function (user) {
+mealshareSchema.methods.userIsHost = function(user) {
 	var userId = user._id.toString();
 	for (var i = 0; i < this.hosts.length; i++) {
 		var host = this.hosts[i];
@@ -46,38 +52,29 @@ mealshareSchema.methods.userIsHost = function (user) {
 mealshareSchema.methods.addGuest = function(user, cb) {
 	var self = this;
 	if (self.userIsGuest(user) != -1) {
-		cb("user is already guest");
-		return;
+		return cb("user is already guest");
+	} else if (self.userIsHost(user) != -1) {
+		return cb("user is already host");
 	} else if (self.spots_left == 0) {
-		cb("mealshare is full");
-		return;
+		return cb("mealshare is full");
 	}
 	self.guests.push(user);
 	self.spots_left--;
 	self.save(function(err) {
-		if (err) {
-			cb(err);
-		}
-		var fEMS = new frontEndMealshare(self);
-		fEMS.isGuest = true;
-		cb(null, fEMS);
+		cb(err, self);
 	});
 }
 
 mealshareSchema.methods.addHost = function(user, cb) {
 	var self = this;
 	if (self.userIsHost(user) != -1) {
-		cb("user is already host");
-		return;
+		return cb("user is already host");
+	} else if (self.userIsGuest(user) != -1) {
+		return cb("user is already guest");
 	}
 	self.hosts.push(user);
 	self.save(function(err) {
-		if (err) {
-			cb(err);
-		}
-		var fEMS = new frontEndMealshare(self);
-		fEMS.isHost = true;
-		cb(null, fEMS);
+		cb(err, self);
 	});
 }
 
@@ -85,17 +82,12 @@ mealshareSchema.methods.removeGuest = function(user, cb) {
 	var self = this;
 	var guestIndex = self.userIsGuest(user);
 	if (guestIndex == -1) {
-		cb("user is not guest");
-		return;
+		return cb("user is not guest");
 	}
 	self.guests.splice(guestIndex, 1);
 	self.spots_left++;
 	self.save(function(err) {
-		if (err) {
-			cb(err);
-		}
-		var fEMS = new frontEndMealshare(self);
-		cb(null, fEMS);
+		cb(err, self);
 	});
 }
 
@@ -103,54 +95,29 @@ mealshareSchema.methods.removeHost = function(user, cb) {
 	var self = this;
 	var hostIndex = self.userIsHost(user);
 	if (hostIndex == -1) {
-		cb("user is not host");
-		return;
+		return cb("user is not host");
 	}
 	self.hosts.splice(hostIndex, 1);
 	self.save(function(err) {
-		if (err) {
-			cb(err);
-		}
-		var fEMS = new frontEndMealshare(self);
-		cb(null, fEMS);
+		cb(err, self);
 	});
 }
 
-mealshareSchema.methods.delete = function(user, cb) {
+mealshareSchema.methods.update = function(name, description, maxCap, dateTime, price, cb) {
 	var self = this;
-	if (self.creator._id.toString() == user._id.toString() || user.isAdmin()) {
-		self.remove(function(err) {
-			cb(err, self._id);
-		});
-	} 
+	self.name = name;
+	self.description = description;
+	self.max_guests = maxCap;
+	self.spots_left = maxCap - self.guests.length;
+	self.time = dateTime;
+	self.price = price;
+
+	self.save(function(err) {
+		cb(err, self);
+	});
 }
 
 // STATIC METHODS
-
-// Frontend Mealshare object
-
-function frontEndMealshare(ms) {
-	this.id = ms._id;
-    this.name = ms.name;
-    this.description = ms.description;
-    this.creator = ms.creator.name;
-    this.time = ms.time;
-    this.location; //not implemented yet
-    this.guests = [];
-    this.hosts = [];
-    this.maxCapacity;
-    this.spotsLeft;
-    this.isFull = ms.spots_left == 0;
-    this.fewSpotsLeft = ms.spots_left <= 3 && ms.spots_left > 0;
-    this.price = ms.price;
-    this.happeningNow = ms.time <= Date.now();
-
-    this.index;
-
-    this.isCreator = false;
-    this.isHost = false;
-    this.isGuest = false;
-}
 
 mealshareSchema.statics.create = function(user, name, description, maxCap, dateTime, price, cb) {
 	var nMS = new Mealshare();
@@ -163,120 +130,41 @@ mealshareSchema.statics.create = function(user, name, description, maxCap, dateT
     nMS.spots_left = maxCap;
     nMS.time = dateTime;
     nMS.price = price;
-    // nMS.hosts = req.body.hosts;
+    // nMS.hosts = req.body.hosts; // creators can't yet add hosts and guests at create
     // nMS.guests = req.body.guests;
-
-    if (dateTime < new Date()) {
-    	return cb("cannot create a mealshare before current time");
-    }
     
     nMS.save(function(err) {
-        if (err) {
-        	cb(err);
-        	return;
-        }
-        user.created_mealshares.push(nMS._id);
-        user.save();
-
-        var fEMS = new frontEndMealshare(nMS);
-        fEMS.isCreator = true;
-
-        cb(null, fEMS);
+    	return cb(err, nMS);
     });
 }
 
-generateFrontEndMealsharesForUser = function(mealshares, user) {
-	var frontEndMealshares = [];
-
-	for (var i = 0; i < mealshares.length; i++) {
-        var mealshare = mealshares[i];
-        var fEMS = new frontEndMealshare(mealshare);
-
-        // public stuff
-        for (var j = 0; j < mealshare.hosts.length; j++) {
-        	var hostName = mealshare.hosts[j].name;
-        	fEMS.hosts.push(hostName);
-        }
-
-        fEMS.index = i;
-
-        // creator and guest should see the full guest list
-        if (mealshare.creator._id.toString() == user._id.toString()) {
-        	fEMS.isCreator = true;
-        	fEMS.isHost = true;
-        	fEMS.maxCapacity = mealshare.max_guests;
-        	fEMS.spotsLeft = mealshare.spots_left;
-
-        	for (var j = 0; j < mealshare.guests.length; j++) {
-        		var guestName = mealshare.guests[j].name;
-        		fEMS.guests.push(guestName);
-        	}
-        }
-        else if (mealshare.userIsGuest(user) != -1) {
-        	fEMS.isGuest = true;
-        	for (var j = 0; j < mealshare.guests.length; j++) {
-        		var guestName = mealshare.guests[j].name;
-        		fEMS.guests.push(guestName);
-        	}
-        }
-        else if (mealshare.userIsHost(user) != -1) { // hosts also see nothing for now
-            fEMS.isHost = true;
-        }
-        frontEndMealshares.push(fEMS);
-    }
-
-    return frontEndMealshares;
+mealshareSchema.statics.getMealsharesCreatedByUser = function(user, cb) {
+	Mealshare.find({ creator: user }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
+		return cb(err, mealshares);
+	});
 }
 
-// we don't want to give all users access to all fields, and we don't want userids in the lists, so we filter a little for the specific user
-// gets mealshares that are upcoming and on-going (considered within an hour)
-mealshareSchema.statics.getFrontEndMealsharesForUser = function(user, cb) {
+mealshareSchema.statics.getUpcoming = function(cb) {
 	var oneHourAgo = new Date();
 	oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+
 	Mealshare.find({time: { $gt: oneHourAgo } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
-		if (err) {
-			return cb(err);
-		}
-		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
-
-        cb(null, frontEndMealshares);
-
-	});
-}
-
-mealshareSchema.statics.getMealsharesCreatedByUser = function(user, cb) {
-	Mealshare.find({time: {$gt: Date.now() }, creator: user}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
-		if (err) {
-			return cb(err);
-		}
-		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
-		cb(null, frontEndMealshares);
-	});
-}
-
-mealshareSchema.statics.getUpcomingMealshares = function(user, cb) {
-	Mealshare.find({time: { $gt: Date.now() } }).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
-		if (err) {
-			return cb(err);
-		}
-		var frontEndMealshares = generateFrontEndMealsharesForUser(mealshares, user);
-
-        cb(null, frontEndMealshares);
+		return cb(err, mealshares);
 	});
 }
 
 mealshareSchema.statics.getAllMealshares = function(cb) {
 	Mealshare.find({}).sort('time').populate('creator hosts guests').exec(function(err, mealshares) {
-		if (err) {
-			return cb(err);
-		}
+        return cb(err, mealshares);
+	});
+}
 
-        cb(null, mealshares);
+mealshareSchema.statics.getMealshare = function(id, cb) {
+    Mealshare.findById(id).populate('creator hosts guests').exec(function(err, mealshare) {
+		return cb(err, mealshare);
 	});
 }
 
 Mealshare = mongoose.model('Mealshare', mealshareSchema);
 
-module.exports = {
-    Mealshare: Mealshare
-};
+module.exports = Mealshare;

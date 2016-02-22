@@ -10,13 +10,13 @@ mongoose.connect('mongodb://localhost:27017/NUDL', function(err, db) {
 	else {
 		console.log("Connected to db")
 	}
-})
+});
 
-var user = require('./models/user');
-var mealshare = require('./models/mealshare');
+var User = require('./models/user');
+var Mealshare = require('./models/mealshare');
 
 module.exports = {
-    User: user.User,
-    Mealshare: mealshare.Mealshare,
+    User: User,
+    Mealshare: Mealshare,
     db: db
 };
