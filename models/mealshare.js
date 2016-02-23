@@ -12,8 +12,7 @@ var mealshareSchema = new Schema({
     guests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     time: Date,
     max_guests: Number,
-    spots_left: Number,
-
+    spots_left: Number
     //scheduled job names -- emails
 });
 

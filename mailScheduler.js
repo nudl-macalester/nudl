@@ -13,13 +13,15 @@ var REMINDER_TIME_EST = 8;
 module.exports.scheduleGuestReminder = function(mealshare) {
 	// if a reminder is scheduled already, we return
 	if (Scheduler.scheduledJobs[SCHEDULING_PREFIXES.GUEST_REMINDER + mealshare._id]) {
+		console.log("already scheduled job");
 		return;
 	}
 
+	console.log("scheduling job");
 	Scheduler.scheduleJob(SCHEDULING_PREFIXES.GUEST_REMINDER + mealshare._id, mealshare.time.setHours(REMINDER_TIME_EST), function() {
 		emailGuestsReminder(mealshare._id);
 	});
-	
+
 }
 
 emailGuestsReminder = function(mealshareId) {
