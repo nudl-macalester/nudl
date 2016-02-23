@@ -1,5 +1,6 @@
 var Scheduler = require('node-schedule');
 var Emailer = require('./mail');
+var Mealshare = require('./models/mealshare');
 
 var SCHEDULING_PREFIXES = {
     GUEST_REMINDER: 'gr',
@@ -21,13 +22,13 @@ module.exports.scheduleGuestReminder = function(mealshare) {
 	Scheduler.scheduleJob(SCHEDULING_PREFIXES.GUEST_REMINDER + mealshare._id, mealshare.time.setHours(REMINDER_TIME_EST), function() {
 		emailGuestsReminder(mealshare._id);
 	});
-	console.log(Scheduler.scheduledJobs);
 }
 
 emailGuestsReminder = function(mealshareId) {
     Mealshare.getMealshare(mealshareId, function(err, mealshare) {
         if (mealshare) {
            Emailer.sendMealshareGuestReminder(mealshare);
+           console.log("reminder sent");
         }
     });
 }
