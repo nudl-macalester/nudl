@@ -21,7 +21,7 @@ module.exports.scheduleGuestReminder = function(mealshare) {
 	Scheduler.scheduleJob(SCHEDULING_PREFIXES.GUEST_REMINDER + mealshare._id, mealshare.time.setHours(REMINDER_TIME_EST), function() {
 		emailGuestsReminder(mealshare._id);
 	});
-
+	console.log(Scheduler.scheduledJobs);
 }
 
 emailGuestsReminder = function(mealshareId) {
