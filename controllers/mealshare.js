@@ -236,7 +236,6 @@ function FrontEndMealshare(ms) {
     Mealshare.getUpcoming(function(err, mealshares) {
         mealshares.forEach(function(mealshare) {
             EmailScheduler.scheduleGuestReminder(mealshare);
-            console.log(EmailScheduler.scheduledJobs);
         });
     });
 })();
