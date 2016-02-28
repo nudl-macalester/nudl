@@ -1,5 +1,6 @@
 var nodemailer = require('nodemailer');
 var utils = require('./utils');
+var emailTemplates = require('./emailTemplates');
 
 var generator = require('xoauth2').createXOAuth2Generator({
     user: 'nudl.macalester@gmail.com',
@@ -84,7 +85,8 @@ module.exports.sendMealshareCreate = function(mealshare, user) {
     sendEmail({
         to: user.email,
         subject: "May the forks be with you!",
-        body: 'Hi ' + user.name + ', <br><br>Thank you for signing up to host the Nüdl ' + mealshare.name + '.<br><br>Here are 3 things you should know:<br><br>1. Please read the checklist before your dinner: https://goo.gl/G2RQMf <br><br> 2.  NÜDL Photographer Emma Foti ‘18 might be in touch with you aboutvisiting your Mealshare. She’s creating a Macalester Cookbook: http://nudlcookbook.tumblr.com/<br><br> 3. Please share our philosophy with your friends and tell them about your NÜDL experience: http://nudl.co/about <br><br> You can get in touch with us at nudl.macalester@gmail.com. <br><br> Bon appétit,<br>The NÜDL team<br><br>Eat together. Eat smarter. <br>www.nudl.co'
+        body: emailTemplates.getCreateTemplate(mealshare, user)
+        //body: 'Hi ' + user.name + ', <br><br>Thank you for signing up to host the Nüdl ' + mealshare.name + '.<br><br>Here are 3 things you should know:<br><br>1. Please read the checklist before your dinner: https://goo.gl/G2RQMf <br><br> 2.  NÜDL Photographer Emma Foti ‘18 might be in touch with you aboutvisiting your Mealshare. She’s creating a Macalester Cookbook: http://nudlcookbook.tumblr.com/<br><br> 3. Please share our philosophy with your friends and tell them about your NÜDL experience: http://nudl.co/about <br><br> You can get in touch with us at nudl.macalester@gmail.com. <br><br> Bon appétit,<br>The NÜDL team<br><br>Eat together. Eat smarter. <br>www.nudl.co'
     });
 }
 

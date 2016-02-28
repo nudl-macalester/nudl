@@ -1,19 +1,4 @@
 
-module.exports.getReminderTemplate = function(user, mealshare) {
-	var reminderBody = 
-		"<table width=\"100%\" cellspacing=\"10\" cellpadding=\"0\">
-			<table class=\"main\" width = \"580\" cellspacing= \"10\" cellpadding=\"0\" border=\"1\">
-				<tr>
-					<td>Hi there " + user.name + "</td>
-				</tr>
-				<tr>
-					<td>remember your Mealshare: " + mealshare.name + " </td>
-				</tr>
-			</table>
-		</table>"
-	return reminderBody;
-}
-
 module.exports.getUpdateTemplate = function(mealshare, message) {
     return'Hi there! <br><br> The Mealshare ' + mealshare.name +
         ' has been updated! Here\'s a message from ' + mealshare.creator.name + 
@@ -21,25 +6,24 @@ module.exports.getUpdateTemplate = function(mealshare, message) {
 }
 
 module.exports.getAttendTemplate = function(mealshare, user) {
-	return 'Hi ' + user.name + '! <br><br>  You have reserved a spot 
+	return `Hi ' + user.name + '! <br><br>  You have reserved a spot 
 		at the Mealshare ' + mealshare.name + '<br><br>Other guests include:<br><br>' 
 		+ guestsNames + '<br><br>Time: ' + dateTimeString + ' <br><br> If for some 
 		reason you cannot attend, please find a friend to replace you and \"unattend\" 
 		our RSVP on nudl.co. We will hold you accountable for your spot at the table 
 		if you are RSVP’d for the event 6 hours in advance of the start time. 
 		<br><br>Bon Appétit, <br>The NÜDL Team<br><br>Eat together. Eat smarter.
-		<br>nudl.co';
+		<br>nudl.co`;
 }
 
 module.exports.getCreateTemplate = function(mealshare, user) {
-	return 
-		"<table width=\"100%\" cellspacing=\"10\" cellpadding=\"0\">
+	return `<table width=\"100%\" cellspacing=\"10\" cellpadding=\"0\"> 
 			<table class=\"main\" width = \"580\" cellspacing= \"10\" cellpadding=\"0\" border=\"1\">
 				<tr>
-					<td>Hi " + user.name + ", </td>
+					<td>Hi ` + user.name + `, </td>
 				</tr>
 				<tr>
-					<td>Thank you for signing up to host the NÜDL"+ mealshare.name + " </td>
+					<td>Thank you for signing up to host the NÜDL` + mealshare.name + ` </td>
 				</tr>
 				<tr>
 				Here are 3 things you should know:
@@ -71,34 +55,29 @@ module.exports.getCreateTemplate = function(mealshare, user) {
 				<tr>
 				www.nudl.co
 				</tr>
+			</table>
 
-		</table>";
-}
-
-
-
-	'Hi ' + user.name + ', <br><br>Thank you for signing up to host the NÜDL '
-	 + mealshare.name + '.<br><br>
+		</table>`;
 }
 
 module.exports.getGuestReminderTemplate = function(mealshare, user) {
-	return "You’ve reserved a spot at: " + mealshare.name + "<br><br>Time: " + dateTimeString + 
+	return `You’ve reserved a spot at: " + mealshare.name + "<br><br>Time: " + dateTimeString + 
 	"<br><br>If for some reason you cannot attend, please find a friend to replace you and “undo” 
 	our RSVP on nudl.co. We will hold you accountable for your spot at the table if you are RSVP’d 
 	for the event 6 hours in advance of the start time. <br><br>Bon Appétit,<br>The NÜDL Team
-	<br><br>Eat together. Eat smarter. <br>www.nudl.co";
+	<br><br>Eat together. Eat smarter. <br>www.nudl.co`;
 }
 
 module.exports.getEmailVerificationTemplate = function(user) {
-	return 'Hi!<br/><br/>Please follow the link below to verify your account on NUDL:<br/><a 
+	return `Hi!<br/><br/>Please follow the link below to verify your account on NUDL:<br/><a 
 	href="' + url + '/verify?token=' + user.verify_string + '">Verify Account</a><br/><br/>Cheers,
-	<br/>The NÜDL Team';
+	<br/>The NÜDL Team`;
 }
 
 module.exports.getEmailResetTemplate = function(user) {
-	return 'Hi!<br/><br/>Please follow the link below to reset your account password:<br/><a 
+	return `Hi!<br/><br/>Please follow the link below to reset your account password:<br/><a 
 	href="' + url + '/reset?token=' + user.password_reset + '">Reset Password</a><br/><br/>Cheers,
-	r/>The NÜDL Team';
+	r/>The NÜDL Team`;
 }
 
 module.exports.getEmailResetConfirmTemplate = function(user) {
