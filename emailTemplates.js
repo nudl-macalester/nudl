@@ -6,3 +6,5 @@ module.exports.getReminderTemplate = function(user, mealshare) {
 		"remember your mealshare:";
 	return reminderBody;
 }
+
+
