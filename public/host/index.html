@@ -92,9 +92,28 @@
         <!-- <label for="time">Time:</label> -->
         <input type="text" class="timepicker" placeholder="Time" name="time">
         <input type="number" placeholder="Price" min="2" name="price">
+
         <br><br>
 
-        <textarea rows="4" name="description" form="new_mealshare_form" placeholder="Description -- Location, Dietary restrictions, Alergens etc."></textarea><br>
+        <textarea rows="4" name="description" form="new_mealshare_form" placeholder="Description"></textarea>
+
+        <input type="radio" name="dietary_restrictions" value="None" checked> None<br>
+        <input type="radio" name="dietary_restrictions" value="Pescatarian" checked> Pescatarian<br>
+        <input type="radio" name="dietary_restrictions" value="Vegetarian" checked> Vegetarian<br>
+        <input type="radio" name="dietary_restrictions" value="Vegan" checked> Vegan<br>
+
+        <input type="checkbox" name="allergens" value="Peanut">Peanut<br>
+        <input type="checkbox" name="allergens" value="Dairy">Dairy<br>
+        <input type="checkbox" name="allergens" value="Wheat">Wheat<br>
+        <input type="checkbox" name="allergens" value="Egg">Egg<br>
+        <input type="checkbox" name="allergens" value="Soy">Soy<br>
+        <input type="checkbox" name="allergens" value="Fish">Fish<br>
+        <input type="checkbox" name="allergens" value="Shellfish">Shellfish<br>
+        <input type="text" name="location">Location<br>
+        <input type="text" name="contact_info">Contact Info<br>
+
+
+        <br>
         <button class="btn btn-primary" data-bind="click: createMeal">GO</button>
     </form>
 

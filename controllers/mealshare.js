@@ -5,26 +5,26 @@ var EmailScheduler = require('../mailScheduler');
 
 var exports = module.exports = {};
 
-exports.createMealshare = function(user, name, description, maxCap, dateTime, price, cb) {
-    if (dateTime < new Date()) {
-    	return cb("cannot create a mealshare before current time");
-    } else if (maxCap < 1) {
-    	return cb("cannot create mealshare with fewer than one guest");
+exports.createMealshare = function(mealshare, cb) {
+    var user = mealshare.user
+    if (mealshare.date < new Date()) {
+        return cb("Cannot create a mealshare before current time.");
+    } else if (mealshare.max_guests < 1) {
+        return cb("Cannot create mealshare with fewer than one guest.");
     }
+    Mealshare.create(mealshare, function(err, mealshare) {
+        if (err) {
+            return cb(err);
+        }
+        user.created_mealshares.push(mealshare);
+        user.save();
 
-    Mealshare.create(user, name, description, maxCap, dateTime, price, function(err, mealshare) {
-    	if (err) {
-    		return cb(err);
-    	}
-    	user.created_mealshares.push(mealshare);
-    	user.save();
-
-    	var fEMS = new FrontEndMealshare(mealshare);
-    	Emailer.sendMealshareCreate(mealshare, user);
+        var fEMS = new FrontEndMealshare(mealshare);
+        Emailer.sendMealshareCreate(mealshare, user);
 
         EmailScheduler.scheduleGuestReminder(mealshare);
 
-    	cb(null, fEMS);
+        cb(null, fEMS);
     });
 }
 

@@ -11,6 +11,10 @@ var mealshareSchema = new Schema({
     hosts: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     guests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     time: Date,
+    location: String,
+    contact_info: String,
+    dietary_restrictions: {type: [String], enum: ['None', 'Vegetarian', 'Vegan', 'Pescatarian']},
+    allergens: {type: [String], enum: ['Peanut', 'Dairy', 'Wheat', 'Egg', 'Soy', 'Fish', 'Shellfish']},
     max_guests: Number,
     spots_left: Number
     //scheduled job names -- emails
@@ -118,17 +122,21 @@ mealshareSchema.methods.update = function(name, description, maxCap, dateTime, p
 
 // STATIC METHODS
 
-mealshareSchema.statics.create = function(user, name, description, maxCap, dateTime, price, cb) {
+mealshareSchema.statics.create = function(mealshare, cb) {
 	var nMS = new Mealshare();
 
-    nMS.creator = user;
-    nMS.name = name;
-    nMS.description = description;
-    nMS.hosts.push(user);
-    nMS.max_guests = maxCap;
-    nMS.spots_left = maxCap;
-    nMS.time = dateTime;
-    nMS.price = price;
+    nMS.creator = mealshare.user;
+    nMS.name = mealshare.name;
+    nMS.description = mealshare.description;
+    nMS.hosts.push(mealshare.user);
+    nMS.max_guests = mealshare.max_guests;
+    nMS.spots_left = mealshare.max_guests;
+    nMS.time = mealshare.date;
+    nMS.location = mealshare.location
+    nMS.price = mealshare.price;
+    nMS.dietary_restrictions = mealshare.dietary_restrictions;
+    nMS.allergens = mealshare.allergens;
+    nMS.contact_info = mealshare.contact_info;
     // nMS.hosts = req.body.hosts; // creators can't yet add hosts and guests at create
     // nMS.guests = req.body.guests;
     

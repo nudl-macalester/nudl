@@ -5,14 +5,24 @@ var mealshareController = require('../controllers/mealshare');
 module.exports = function(app) {
 
     app.post('/mealshare/new', isLoggedIn, function(req, res) {
-        mealshareController.createMealshare(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(req.body.date + " " + req.body.time + " GMT-0600"), req.body.price,
-            function(err, ms) {
-                if (err) {
-                    return res.status(500)
-                            .send("Error saving new mealshare");
-                }
-                res.status(200)
-                    .send(ms);
+        var mealshare = {
+            user: req.user,
+            name: req.body.name,
+            description: req.body.description,
+            max_guests: req.body.max_guests,
+            price: req.body.price,
+            date: new Date(req.body.date + " " + req.body.time + " GMT-0600"),
+            location: req.body.location,
+            dietary_restrictions: req.body.dietary_restrictions,
+            allergens: req.body.allergens,
+            contact_info: req.body.contact_info
+        }
+
+        mealshareController.createMealshare(mealshare, function(err, ms) {
+            if (err) {
+                return res.status(500).send("Error saving new mealshare");
+            }
+            res.status(200).send(ms);
         });
     });
 
