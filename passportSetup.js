@@ -1,4 +1,5 @@
 var LocalStrategy = require('passport-local').Strategy;
+var cookieParser = require('cookie-parser');
 var bcrypt = require('bcrypt-nodejs');
 var database = require('./database');
 var mail = require('./mail');
@@ -49,8 +50,9 @@ module.exports.setup = function(passport) {
                     if (!user) return done(null, false, {message: 'email not found'});
 
                     user.comparePassword(password, function(err, isMatch) {
-                        if (isMatch)
+                        if (isMatch) {
                             return done(null, user);
+                        }
 
                         return done(null, false, { message: 'Incorrect password.' });
                     });

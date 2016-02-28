@@ -20,7 +20,10 @@ var userSchema = new Schema({
     password_reset: String,
     reset_expire: Date,
 
-    created_mealshares: [{ type: Schema.Types.ObjectId, ref: 'Mealshare' }]
+    created_mealshares: [{ type: Schema.Types.ObjectId, ref: 'Mealshare' }],
+
+    persistent_id: String,
+    persistent_token: String
 });
 
 userSchema.pre('save', function(next) {
