@@ -64,7 +64,7 @@ userSchema.methods.generateVerification = function() {
 }
 
 userSchema.methods.isAdmin = function() {
-    var adminUserNames = /(Alex Dangel|Caitlin Toner|Pradyut Bansal|Emma|Devin|Eivind Bakke)/;
+    var adminUserNames = /(Alex Dangel|Caitlin Toner|Pradyut Bansal|Emma|Devin|Eivind Bakke|zach|Rachel Siegel)/;
     return adminUserNames.test(this.name);
 }
 
@@ -82,6 +82,31 @@ userSchema.methods.generateRememberToken = function(cb){
             user.save();
             cb(null, token);
         });
+    });
+}
+
+userSchema.methods.createdMealshareIndex = function(mealshare) {
+    var mealshareId = mealshare._id.toString();
+    for (var i = 0; i < this.created_mealshares.length; i++) {
+        var ms = this.created_mealshares[i];
+        if (ms._id && ms._id.toString() == mealshareId) {
+            return i;
+        } else if (ms.toString() == mealshareId) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+userSchema.methods.removeCreatedMealshare = function(mealshare, cb) {
+    var self = this;
+    var msIndex = self.createdMealshareIndex(mealshare);
+    if (msIndex == -1) {
+        return cb("user is not creator");
+    }
+    self.created_mealshares.splice(msIndex, 1);
+    self.save(function(err) {
+        cb(err, mealshare);
     });
 }
 
@@ -173,6 +198,4 @@ userSchema.statics.getAllUsers = function(cb) {
 
 User = mongoose.model('User', userSchema);
 
-module.exports = {
-    User: User
-};
+module.exports = User;

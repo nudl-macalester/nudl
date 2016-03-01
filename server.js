@@ -44,18 +44,21 @@ passportUtils.setupStrategies(passport);
 require('./routes/auth.js')(app);
 require('./routes/mealshare.js')(app);
 
+var mealshareController = require('./controllers/mealshare');
+
 // routes
 
 
 app.get('/home/', isLoggedIn, function(req, res) {
-    var user = req.user;
-    // var userId = "56a5803eb7f4d4922a771627"; // USEFUL FOR TESTING
-
     var mealsharesString = null;
 
     var homeDocPath = path.join(process.cwd(), '/public/home/index.html');
 
-    db.Mealshare.getFrontEndMealsharesForUser(user, function(err, mealshares) {
+    mealshareController.getFrontEndMealsharesForUser(req.user, function(err, mealshares) {
+        if (err) {
+            return res.status(500)
+                    .send("something went wrong");
+        }
         mealsharesString = "var mealshares = " + JSON.stringify(mealshares) + ";";
 
         fs.readFile(homeDocPath, 'utf8', 'r+', function(err, homeDoc) {
@@ -77,7 +80,7 @@ app.get('/host/', isLoggedIn, function(req, res) {
 
     var hostDocPath = path.join(process.cwd(), 'public/host/index.html');
 
-    db.Mealshare.getUpcomingMealshares(user, function(err, mealshares) {
+    mealshareController.getFrontEndMealsharesForUser(user, function(err, mealshares) {
         mealsharesString = "var mealshares = " + JSON.stringify(mealshares) + ";";
 
         fs.readFile(hostDocPath, 'utf8', 'r+', function(err, hostDoc) {
