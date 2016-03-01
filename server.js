@@ -10,7 +10,7 @@ var flash = require('connect-flash');
 var logger = require('morgan');
 var fs = require('fs');
 var mail = require('./mail');
-var auth = require('./passportSetup');
+var passportUtils = require('./passportUtils');
 var http = require('http');
 var crypto = require('crypto');
 var jade = require('jade');
@@ -39,13 +39,12 @@ app.use(cookieParser());
 app.use(flash());
 //app.use(app.router);
 
-auth.setup(passport);
+passportUtils.setupStrategies(passport);
 
 require('./routes/auth.js')(app);
 require('./routes/mealshare.js')(app);
 
 var mealshareController = require('./controllers/mealshare');
-
 
 // routes
 
@@ -148,13 +147,19 @@ app.get('/admin/mealshare/get/:mealshareId', isLoggedIn, isAdmin, function(req, 
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated() && req.user.verified) {
+    if (req.url === '/') { // if valid cookie, redirect to /home/, otherwise continue to /
+        if (passportUtils.requestHasCookie(req)) {
+            return passport.authenticate('cookie-login', {failureRedirect: '/signout', successRedirect: '/home/', failureFlash: true})(req, res, next);
+        }
         return next();
     }
 
     if (req.user && !req.user.verified) {
-        res.end('Please verify your account.');
-        return;
+        return res.end('Please verify your account.');
+    } else if (req.isAuthenticated() && req.user.verified) {
+        return next();
+    } else if (passportUtils.requestHasCookie(req)) {
+        return passport.authenticate('cookie-login', {failureRedirect: '/signout', failureFlash: true})(req, res, next);
     }
 
     res.redirect('/');
@@ -167,8 +172,10 @@ function isAdmin(req, res, next) {
     res.redirect('/');
 }
 
-// Middleware for authentication:
-app.use(express.static(path.join(process.cwd(), '/public')));
+// The regex defines all routes that are allowed without logging in. All other routes are protected
+app.all(/^(?!(\/css|\/js|\/img|\/font\-awesome)).*$/, isLoggedIn);
+
+app.use(express.static(path.join(process.cwd(), '/public/')));
 
 server.listen(8080, function() {
     console.log("Listening on port 8080");

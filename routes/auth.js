@@ -1,17 +1,25 @@
 var passport = require('passport');
-require('../passportSetup');
+var passportUtils = require('../passportUtils');
 var crypto = require('crypto');
 var db = require('../database');
 var mail = require('../mail');
 
 module.exports = function(app) {
-    app.post('/signin', passport.authenticate('local-login',
-        {
-            successRedirect: '/home/',
-            failureRedirect: '/',
-            failureFlash: true
+    app.post('/signin', passport.authenticate('local-login', {failureRedirect: '/', failureFlash: true}),
+        function(req, res) {
+            if (req.body.remember) {
+                passportUtils.createCookie(req, res, function(err) {
+                    if (err) {
+                        return res.status(500)
+                                .send("something went wrong");
+                    }
+                    res.redirect('/home/');
+                });
+            } else {
+                return res.redirect('/home/');
+            }
         }
-    ));
+    );
 
     app.post('/signup', passport.authenticate('local-signup',
         {
@@ -23,7 +31,9 @@ module.exports = function(app) {
 
     app.get('/signout', function(req, res) {
         req.logout();
-        res.redirect('/');
+        passportUtils.removeCookie(res, function(){
+            res.redirect('/');
+        });
     });
 
     app.get('/verify', function(req, res) {
