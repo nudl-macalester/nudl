@@ -1,16 +1,23 @@
 #login input{
 	color: #000000;
 	border-radius: 5px;
-
 }
-#loginCont{
-        width: 70%;
-        clear: both;
-    }
+
+#loginCont {
+    width: 70%;
+   	clear: both;
+}
+
+#remember-check {
+	width: 12px !important;
+	margin-right: 5px;
+}
+
 #loginCont input {
-        width: 100%;
-        clear: both;
-    }
+    width: 100%;
+    clear: both;
+}
+
 #landing{
 	color: #FFFFFF;
 }
