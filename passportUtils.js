@@ -10,7 +10,7 @@ var url = "http://nudl.co/"; //prod
 var COOKIE_NAME = "nudl-remembers-you";
 var COOKIE_VALID_DAYS = 90;
 
-module.exports.setup = function(passport) {
+module.exports.setupStrategies = function(passport) {
 // Passport setup
 
     passport.serializeUser(function(user, done) {
@@ -74,8 +74,8 @@ module.exports.setup = function(passport) {
                             return done(null, user);
 
                         return done("incorrect login credentials. Do not change the cookie parameters");
-                    })
-                })
+                    });
+                });
 
         })
     );
@@ -92,4 +92,13 @@ module.exports.createCookie = function(req, res, cb) {
         res.cookie(COOKIE_NAME, {_id: req.user._id, expire: cookieExpireDate, tk: token});
         cb();
     });
+}
+
+module.exports.removeCookie = function(res, cb) {
+    res.clearCookie(COOKIE_NAME);
+    cb();
+}
+
+module.exports.requestHasCookie = function(req) {
+    return req.cookies[COOKIE_NAME];
 }
