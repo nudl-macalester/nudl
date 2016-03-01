@@ -22,7 +22,6 @@ var userSchema = new Schema({
 
     created_mealshares: [{ type: Schema.Types.ObjectId, ref: 'Mealshare' }],
 
-    persistent_id: String,
     persistent_token: String
 });
 
@@ -52,6 +51,12 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
     });
 };
 
+userSchema.methods.compareCookieToken = function(token, cb) {
+    bcrypt.compare(token, this.persistent_token, function(err, isMatch) {
+        cb(err, isMatch);
+    });
+}
+
 userSchema.methods.generateVerification = function() {
     this.verified = false;
     this.verify_string = crypto.randomBytes(RANDOM_LENGTH).toString('hex');
@@ -61,6 +66,23 @@ userSchema.methods.generateVerification = function() {
 userSchema.methods.isAdmin = function() {
     var adminUserNames = /(Alex Dangel|Caitlin Toner|Pradyut Bansal|Emma|Devin|Eivind Bakke)/;
     return adminUserNames.test(this.name);
+}
+
+userSchema.methods.generateRememberToken = function(cb){
+    var user = this;
+    var token = crypto.randomBytes(RANDOM_LENGTH).toString('hex');
+
+    bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+        if (err) return cb(err);
+
+        bcrypt.hash(token, salt, null, function(err, hash) {
+            if (err) return cb(err);
+
+            user.persistent_token = hash;
+            user.save();
+            cb(null, token);
+        });
+    });
 }
 
 // STATIC METHODS

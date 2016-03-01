@@ -44,6 +44,7 @@ auth.setup(passport);
 require('./routes/auth.js')(app);
 require('./routes/mealshare.js')(app);
 
+var COOKIE_NAME = "nudl-remembers-you";
 
 // routes
 
@@ -145,13 +146,20 @@ app.get('/admin/mealshare/get/:mealshareId', isLoggedIn, isAdmin, function(req, 
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated() && req.user.verified) {
-        return next();
+    if (req.url === '/') {
+        if (req.cookies[COOKIE_NAME]) {
+            return passport.authenticate('cookie-login', {failureRedirect: '/signout', successRedirect: '/home/', failureFlash: true})(req, res, next);
+        }
+        return next(); //little hack to get logged in check to work
     }
 
     if (req.user && !req.user.verified) {
         res.end('Please verify your account.');
         return;
+    } else if (req.isAuthenticated() && req.user.verified) {
+        return next();
+    } else if (req.cookies[COOKIE_NAME]) {
+        return passport.authenticate('cookie-login', {failureRedirect: '/signout', failureFlash: true})(req, res, next);
     }
 
     res.redirect('/');
@@ -165,7 +173,9 @@ function isAdmin(req, res, next) {
 }
 
 // Middleware for authentication:
-app.use(express.static(path.join(process.cwd(), '/public')));
+app.all(/^(?!(\/css|\/js|\/img|\/font\-awesome)).*$/, isLoggedIn);
+
+app.use(express.static(path.join(process.cwd(), '/public/')));
 
 server.listen(8080, function() {
     console.log("Listening on port 8080");

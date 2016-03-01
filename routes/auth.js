@@ -1,17 +1,28 @@
 var passport = require('passport');
-require('../passportSetup');
+var passportUtil = require('../passportSetup');
 var crypto = require('crypto');
 var db = require('../database');
 var mail = require('../mail');
 
+var COOKIE_NAME = "nudl-remembers-you";
+
 module.exports = function(app) {
-    app.post('/signin', passport.authenticate('local-login',
-        {
-            successRedirect: '/home/',
-            failureRedirect: '/',
-            failureFlash: true
+    app.post('/signin', passport.authenticate('local-login', {failureRedirect: '/', failureFlash: true}),
+        function(req, res) {
+            if (req.body.remember) {
+                console.log("creating cookie for persistent login");
+                passportUtil.createCookie(req, res, function(err) {
+                    if (err) {
+                        return res.status(500)
+                                .send("something went wrong");
+                    }
+                    res.redirect('/home/');
+                });
+            } else {
+                return res.redirect('/home/');
+            }
         }
-    ));
+    );
 
     app.post('/signup', passport.authenticate('local-signup',
         {
@@ -23,6 +34,7 @@ module.exports = function(app) {
 
     app.get('/signout', function(req, res) {
         req.logout();
+        res.clearCookie(COOKIE_NAME);
         res.redirect('/');
     });
 
