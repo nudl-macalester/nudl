@@ -89,7 +89,7 @@ module.exports.createCookie = function(req, res, cb) {
 
         var cookieExpireDate = new Date();
         cookieExpireDate.setDate(cookieExpireDate.getDate() + COOKIE_VALID_DAYS);
-        res.cookie(COOKIE_NAME, {_id: req.user._id, expire: cookieExpireDate, tk: token});
+        res.cookie(COOKIE_NAME, {_id: req.user._id, tk: token}, {expires: cookieExpireDate});
         cb();
     });
 }
