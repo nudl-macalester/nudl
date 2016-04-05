@@ -148,9 +148,9 @@ app.get('/admin/mealshare/get/:mealshareId', isLoggedIn, isAdmin, function(req, 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
     if (req.url === '/') { // if valid cookie, redirect to /home/, otherwise continue to /
-        if (passportUtils.requestHasCookie(req)) {
-            return passport.authenticate('cookie-login', {failureRedirect: '/signout', successRedirect: '/home/', failureFlash: true})(req, res, next);
-        }
+        // if (passportUtils.requestHasCookie(req)) {
+        //     return passport.authenticate('cookie-login', {failureRedirect: '/signout', successRedirect: '/home/', failureFlash: true})(req, res, next);
+        // }
         return next();
     }
 
@@ -158,9 +158,11 @@ function isLoggedIn(req, res, next) {
         return res.end('Please verify your account.');
     } else if (req.isAuthenticated() && req.user.verified) {
         return next();
-    } else if (passportUtils.requestHasCookie(req)) {
-        return passport.authenticate('cookie-login', {failureRedirect: '/signout', failureFlash: true})(req, res, next);
     }
+
+    // else if (passportUtils.requestHasCookie(req)) {
+    //     return passport.authenticate('cookie-login', {failureRedirect: '/signout', failureFlash: true})(req, res, next);
+    // }
 
     res.redirect('/');
 }
