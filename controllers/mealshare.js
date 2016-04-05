@@ -49,7 +49,7 @@ exports.updateMealshare = function(user, mealshare, name, description, maxCap, d
 		return cb("this user cannot edit mealshare");
 	}
 
-	var dateTime= new Date(date + "/16 " + time + " GMT-0600");
+	var dateTime= new Date(date + "/16 " + time + " GMT-0500");
     if (dateTime == "Invalid Date") {
     	return cb("Invalid Date");
     }
