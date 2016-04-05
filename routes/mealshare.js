@@ -5,7 +5,7 @@ var mealshareController = require('../controllers/mealshare');
 module.exports = function(app) {
 
     app.post('/mealshare/new', isLoggedIn, function(req, res) {
-        mealshareController.createMealshare(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(req.body.date + " " + req.body.time + " GMT-0600"), req.body.price,
+        mealshareController.createMealshare(req.user, req.body.name, req.body.description, req.body.max_guests, new Date(req.body.date + " " + req.body.time + " GMT-0500"), req.body.price,
             function(err, ms) {
                 if (err) {
                     return res.status(500)
