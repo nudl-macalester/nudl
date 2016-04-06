@@ -175,7 +175,7 @@ function isAdmin(req, res, next) {
 }
 
 // The regex defines all routes that are allowed without logging in. All other routes are protected
-app.all(/^(?!(|\/forgot|\/css|\/js|\/img|\/font\-awesome)).*$/, isLoggedIn);
+app.all(/^(?!(|\/forgot|\/reset|\/css|\/js|\/img|\/font\-awesome)).*$/, isLoggedIn);
 
 app.use(express.static(path.join(process.cwd(), '/public/')));
 
